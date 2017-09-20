@@ -8,18 +8,7 @@ import timeseries as ts
 NUM_CSV = 15
 L_FRAME = 128
 L_OVLAP = 64
-
-FEATURES_TABLE = ts.create_features_table()
-
-'''
-features_extraction of 128sample data/ frame
-@param df: table of sequential x, y, z values
-@return : table of features
-'''
-def get_features(df):
-    row = extract_feature(df)
-    FEATURES_TABLE.append(row)
-    return FEATURES_TABLE.iloc[[0]]
+L_STEPS = L_FRAME - L_OVLAP
 
 '''
 plot 128 frame x y z data
@@ -46,20 +35,19 @@ def is_df_clean( df ):
         return False
     return True
 
-
 dataset = pd.DataFrame()
 
-for i in range(1, num_csv + 1):
+for i in range(1, NUM_CSV + 1):
     csvfile = 'dataset_1/' + str(i) + '.csv'
     print csvfile
-    df = pd.read_csv(csvfile,names=['time','x','y','z','label'])
-
+    df = pd.read_csv(csvfile,names=['time','X','Y','Z','label'])
     max_len = len(df.index)
-    for j in np.arange(0, max_len, L_OVLAP):
+    for j in np.arange(0, max_len, L_STEPS):
         df_new = df[ j : j+L_FRAME ]
         if is_df_clean( df_new ):
-            feats = get_features( df_new )
+            feats = ts.extract_feature( df_new )
             feats['part'] = i
+            feats['label'] = df_new.label.unique()[0]
             dataset = dataset.append( feats, ignore_index = True )
 
 dataset.to_csv('dataset.csv')
