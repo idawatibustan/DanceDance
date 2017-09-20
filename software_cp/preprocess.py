@@ -3,10 +3,13 @@
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
+import timeseries as ts
 
 NUM_CSV = 15
 L_FRAME = 128
 L_OVLAP = 64
+
+FEATURES_TABLE = ts.create_features_table()
 
 '''
 features_extraction of 128sample data/ frame
@@ -14,7 +17,9 @@ features_extraction of 128sample data/ frame
 @return : table of features
 '''
 def get_features(df):
-    return df.iloc[[0]]
+    row = extract_feature(df)
+    FEATURES_TABLE.append(row)
+    return FEATURES_TABLE.iloc[[0]]
 
 '''
 plot 128 frame x y z data
@@ -48,7 +53,7 @@ for i in range(1, num_csv + 1):
     csvfile = 'dataset_1/' + str(i) + '.csv'
     print csvfile
     df = pd.read_csv(csvfile,names=['time','x','y','z','label'])
-    
+
     max_len = len(df.index)
     for j in np.arange(0, max_len, L_OVLAP):
         df_new = df[ j : j+L_FRAME ]
