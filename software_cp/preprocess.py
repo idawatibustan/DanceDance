@@ -33,6 +33,8 @@ def is_df_clean( df ):
     labels = df.label.unique()
     if len(labels) > 1:
         return False
+    if labels[0] not in [3,4,5]:
+        return False
     return True
 
 dataset = pd.DataFrame()
