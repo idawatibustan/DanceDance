@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-import itertools
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from sklearn import svm
 from sklearn.metrics import confusion_matrix
-from nn import plot_confusion_matrix
+from plot_helper import plot_confusion_matrix
 
 # Load training and testing dataset
 train = pd.read_csv('ds_train.csv')
