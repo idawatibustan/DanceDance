@@ -62,12 +62,12 @@ nnModel = mlp.fit(trainData , trainLabel)
 
 x = np.linspace(1, nnModel.n_iter_ , nnModel.n_iter_)
 
-plt.plot(X2 , nnModel.loss_curve_, label = 'Convergence')
+plt.figure()
+plt.plot(x , nnModel.loss_curve_, label = 'Convergence')
 plt.title('Error Convergence ')
 plt.ylabel('Cost function')
 plt.xlabel('Iterations')
 plt.legend()
-plt.show()
 
 print("Training set score for ADAM: %f" % mlp.score(trainData, trainLabel))
 print("Test set score for ADAM: %f"     % mlp.score(testData , testLabel ))
