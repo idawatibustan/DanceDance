@@ -1,86 +1,38 @@
 #include <Arduino_FreeRTOS.h>
 
-TaskHandle_t LPT_TaskHandle;
-TaskHandle_t MPT_TaskHandle;
-TaskHandle_t HPT_TaskHandle;
+TaskHandle_t polling_sensors_taskhandle;
 
-SemaphoreHandle_t binSemaphore_A = NULL;
-
-#define printMsg(taskhandle,str)  {\
-        Serial.print(F("Priority "));\  // Print task priority 
-        Serial.print(uxTaskPriorityGet(taskhandle));\
-        Serial.print(F(" : "));\
-        Serial.println(F(str));\        // Print user string
+// serial printer function
+#define serialPrint(str)  {
+        Serial.println(F(str));
 }
 
 void setup()
 {  
     Serial.begin(115200);
-    Serial.println(F("In Setup function, Creating Binary Semaphore"));
-
-    vSemaphoreCreateBinary(binSemaphore_A);  /* Create binary semaphore */
-
-    if(binSemaphore_A != NULL)
-    {
-        Serial.println(F("Creating low priority task"));
-        xTaskCreate(LPT_Task, "LPT_Task", 100, NULL, 1, &LPT_TaskHandle);
-    }
-    else
-    {
-        Serial.println(F("Failed to create Semaphore"));
-    }
+   
+    xTaskCreate(polling_sensors_task, "polling_sensors_task", 100, NULL, 4, &polling_sensors_taskhandle);
 }
 
 
 void loop()
-{ // Hooked to Idle Task, will run when CPU is Idle
-    Serial.println(F("Loop function"));
-    delay(50);
+{ 
+  vTaskStartScheduler();
 }
 
 
-/*LPT: Low priority task*/
-void LPT_Task(void* pvParameters)
+
+void polling_sensors_task(void* pvParameters)
 {
-    printMsg(LPT_TaskHandle,"LPT_Task Acquiring semaphore"); 
-    xSemaphoreTake(binSemaphore_A,portMAX_DELAY);
+    configASSERT( ( ( uint32_t ) pvParameters ) == 4 );
+    // execute at 25hz
+    const TickType_t xDelay = 40;
+    
+    //TODO: read from sensors
 
-    printMsg(LPT_TaskHandle,"LPT_Task Creating HPT"); 
-    xTaskCreate(HPT_Task, "HPT_Task", 100, NULL, 3, &HPT_TaskHandle); 
-
-
-    printMsg(LPT_TaskHandle,"LPT_Task Creating MPT");  
-    xTaskCreate(MPT_Task, "MPT_Task", 100, NULL, 2, &MPT_TaskHandle); 
-
-    printMsg(LPT_TaskHandle,"LPT_Task Releasing Semaphore");
-    xSemaphoreGive(binSemaphore_A);
-
-    printMsg(LPT_TaskHandle,"LPT_Task Finally Exiting");
-    vTaskDelete(LPT_TaskHandle);
+    //repeat at fixed interval for 25hz reading
+    vTaskDelay(xDelay);
 }
 
-
-/*MPT: Medium priority task*/
-void MPT_Task(void* pvParameters)
-{
-    printMsg(MPT_TaskHandle,"MPT_Task Done and about to exit");
-    vTaskDelete(MPT_TaskHandle);
-}
-
-
-/*MPT: High priority task*/
-void HPT_Task(void* pvParameters)
-{
-    printMsg(HPT_TaskHandle,"HPT_Task Trying to Acquire the semaphore");
-    xSemaphoreTake(binSemaphore_A,portMAX_DELAY);
-
-    printMsg(HPT_TaskHandle,"HPT_Task Acquired the semaphore");    
-
-    printMsg(HPT_TaskHandle,"HPT_Task Releasing the semaphore");
-    xSemaphoreGive(binSemaphore_A);    
-
-    printMsg(HPT_TaskHandle,"HPT_Task About to Exit");
-    vTaskDelete(HPT_TaskHandle);
-}
 
 
