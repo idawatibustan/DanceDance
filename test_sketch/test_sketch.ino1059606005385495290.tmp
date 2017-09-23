@@ -1,0 +1,18 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial testSerial(19, 18);
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  while (!Serial) {
+    ;
+  }
+
+  mySerial.begin(9600);
+  mySerial("This is test communication");
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  
+}
