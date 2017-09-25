@@ -3,7 +3,8 @@
 import serial
 import time
 
-test=serial.Serial("/dev/ttyACM0",9600)
+# test=serial.Serial("/dev/ttyACM0",9600) # USB
+test=serial.Serial("/dev/ttyAMA0",9600) # SPI
 if(test.isOpen() == False):
     test.open()
 
