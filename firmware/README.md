@@ -34,3 +34,8 @@ ref:
 - Coding guide for setting up SPI on RPi
 
 28/9/17 - Abandoned SPI for UART communications between Arduino and RPi
+
+IMPORTANT FILES/FOLDERS
+- MPU6050_duo_short_temp/
+- dummy_server/uart_serial.py
+- uart_interface/
