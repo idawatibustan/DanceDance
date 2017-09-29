@@ -25,26 +25,14 @@ void loop() {
       incoming += received;
       if (incoming == "ACK1") {
         Serial.println("ACK2");
-        incoming = "";
       } else if (incoming == "ACK3") {
         handshake_flag = 1;
         send_sensor_data = 1;
-        incoming = "";
       }
     }
   }
   if (send_sensor_data == 1) {
     compileData();
-    while (Serial.available() > 0) {
-      char received = Serial.read();
-      incoming += received;
-      Serial.println(incoming);
-      if (incoming == "scriptend") {
-        handshake_flag = 0;
-        send_sensor_data = 0;
-        incoming = "";
-      }
-    }
   }
 }
 

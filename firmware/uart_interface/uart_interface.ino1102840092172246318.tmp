@@ -3,7 +3,6 @@ int16_t AcX[N],AcY[N],AcZ[N],Tmp[N],GyX[N],GyY[N],GyZ[N];
 const int MPU_addr[N]={0x68, 0x69};  // I2C address of the first MPU-6050
 
 int handshake_flag;
-int send_sensor_data;
 String incoming;
 
 struct Dataframe {
@@ -14,7 +13,6 @@ void setup() {
   Serial.begin(9600);
   
   handshake_flag = 0;
-  send_sensor_data = 0;
 }
 
 
@@ -23,26 +21,8 @@ void loop() {
     while (Serial.available() > 0) {
       char received = Serial.read();
       incoming += received;
-      if (incoming == "ACK1") {
-        Serial.println("ACK2");
-        incoming = "";
-      } else if (incoming == "ACK3") {
-        handshake_flag = 1;
-        send_sensor_data = 1;
-        incoming = "";
-      }
-    }
-  }
-  if (send_sensor_data == 1) {
-    compileData();
-    while (Serial.available() > 0) {
-      char received = Serial.read();
-      incoming += received;
-      Serial.println(incoming);
-      if (incoming == "scriptend") {
-        handshake_flag = 0;
-        send_sensor_data = 0;
-        incoming = "";
+      if (received == '\n') {
+        Serial.println(incoming);
       }
     }
   }
