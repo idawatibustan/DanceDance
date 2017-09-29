@@ -1,0 +1,22 @@
+int count = 0;
+int buffer[100];
+
+void setup() {
+  Serial.begin(9600);
+
+  for (count=0; count<sizeof(buffer); count++) { // initialization
+    buffer[count] = count;
+  }
+}
+
+int marker = 0;
+void loop() {
+  for (marker=0; marker<sizeof(buffer); marker++) {
+    Serial.write(buffer[marker], BIN);
+    if (marker == 99) {
+      marker = 0;
+    }
+//    delay(1000);
+  }
+}
+

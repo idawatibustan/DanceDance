@@ -1,0 +1,14 @@
+int bytesReceived;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+
+  if (Serial.available() > 0) {
+    bytesReceived = Serial.read();
+    Serial.println(bytesReceived);
+  }
+}
+

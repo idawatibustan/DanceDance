@@ -1,0 +1,15 @@
+#import <SPI.h>
+
+int MOSI = 51;
+int MISO = 50;
+int SCK = 52;
+int SS = 53;
+
+void setup(){
+  Serial.begin(9600);
+}
+
+void loop(){
+
+
+}
