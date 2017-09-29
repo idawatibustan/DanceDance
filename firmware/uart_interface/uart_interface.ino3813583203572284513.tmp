@@ -1,6 +1,5 @@
 const int N = 2;
 int16_t AcX[N],AcY[N],AcZ[N],Tmp[N],GyX[N],GyY[N],GyZ[N];
-const int MPU_addr[N]={0x68, 0x69};  // I2C address of the first MPU-6050
 
 struct Dataframe {
     int16_t AcX[N], AcY[N], AcZ[N], Tmp[N], GyX[N], GyY[N], GyZ[N];
@@ -37,14 +36,13 @@ void compileData() {
   dataframe.GyY[1] = 5000;
   dataframe.GyZ[1] = 6000;
 
+  // convert int to string
+  // concat string to empty string
   char sensor_one[100];
   char sensor_two[100];
-//  sprintf(sensor_one, "%d AcX:%d AcY:%d AcZ:%d GyX:%d GyY:%d GyZ:%d", MPU_addr[0], dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0]);
-//  sprintf(sensor_two, "%d AcX:%d AcY:%d AcZ:%d GyX:%d GyY:%d GyZ:%d", MPU_addr[1], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
-
-  // format: <SENSOR_ID> <ACC_X> <ACC_Y> <ACC_Z> <GYRO_X> <GYRO_Y> <GYRO_Z>
-  sprintf(sensor_one, "%d %d %d %d %d %d %d", MPU_addr[0], dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0]);
-  sprintf(sensor_two, "%d %d %d %d %d %d %d", MPU_addr[1], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
+  sprintf(sensor_one, "AcX:%d AcY:%d AcZ:%d Tmp:%d GyX:%d GyY:%d GyZ:%d", 
+    dataframe.AcX[0]);
+  sprintf(sensor_two, "%d", dataframe.AcX[1]);
 
   Serial.println(sensor_one);
   delay(500);

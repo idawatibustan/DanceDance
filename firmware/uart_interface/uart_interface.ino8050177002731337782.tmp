@@ -1,0 +1,46 @@
+const int N = 2;
+int16_t AcX[N],AcY[N],AcZ[N],Tmp[N],GyX[N],GyY[N],GyZ[N];
+
+struct Dataframe {
+    int16_t AcX[N], AcY[N], AcZ[N], Tmp[N], GyX[N], GyY[N], GyZ[N];
+} dataframe;
+
+void setup() {
+  Serial.begin(9600);
+}
+
+
+void loop() {
+  String toSend = "This message was sent from Arduino MEGA";
+  int strSize = sizeof(toSend);
+
+  Serial.println(toSend);
+
+  delay(1000);
+}
+
+void compileData() {
+  // dummy values
+  dataframe.AcX[0] = 100;
+  dataframe.AcY[0] = 200;
+  dataframe.AcZ[0] = 300;
+  dataframe.Tmp[0] = 50;
+  dataframe.GyX[0] = 400;
+  dataframe.GyY[0] = 500;
+  dataframe.GyZ[0] = 600;
+
+  dataframe.AcX[1] = 1000;
+  dataframe.AcY[1] = 2000;
+  dataframe.AcZ[1] = 3000;
+  dataframe.Tmp[1] = 100;
+  dataframe.GyX[1] = 4000;
+  dataframe.GyY[1] = 5000;
+  dataframe.GyZ[1] = 6000;
+
+  int i = 0;
+  char sensor_one[100]
+  char sensor_two[100]
+
+  
+}
+
