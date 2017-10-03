@@ -7,13 +7,14 @@ import threading
 import os
 import pandas as pd
 
+
 class server:
     def __init__(self, ip_addr, port_num):
         global action
         global action_set_time
 
         # init server
-        self.auth = server_auth.server_auth()  # create the server_auth object
+        self.auth = server_auth.server_auth()
         # Create a TCP/IP socket
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Bind the socket to the port
@@ -23,12 +24,12 @@ class server:
         # Listen for incoming connections
         self.sock.listen(3)
         self.actions = ['busdriver', 'frontback', 'jumping', 'jumpingjack', 'sidestep',
-                'squatturnclap', 'turnclap', 'wavehands', 'windowcleaner360',
-                'windowcleaning']
+                        'squatturnclap', 'turnclap', 'wavehands', 'windowcleaner360',
+                        'windowcleaning']
         self.filename = "logServer.csv"
         self.columns = ['timestamp', 'action',
-                'goal', 'time_delta',
-                'correct', 'voltage', 'current', 'power', 'cumpower']
+                        'goal', 'time_delta',
+                        'correct', 'voltage', 'current', 'power', 'cumpower']
         self.df = pd.DataFrame(columns=self.columns)
         self.df = self.df.set_index('timestamp')
         action = None
@@ -36,46 +37,44 @@ class server:
         self.timeout = 60
         self.getAction()
 
-        # everything above pertains to setting up the 'server' for the RPi to
-        # connect to
         while True:
             # Wait for a connection
             print('waiting for a connection', file=sys.stderr)
             connection, client_address = self.sock.accept()
             self.secret_key = input("Enter the secret key: ")
 
-            # client_address belongs to the RPi
             print('connection from', client_address, file=sys.stderr)
 
-            # checks if the key on the server is correct
             if len(self.secret_key) == 16 or len(self.secret_key) == 24 or len(self.secret_key) == 32:
-              pass
+                pass
             else:
-              print ("AES key must be either 16, 24, or 32 bytes long")
-              break
+                print ("AES key must be either 16, 24, or 32 bytes long")
+                break
 
             # Receive the data in small chunks and retransmit it
             while True:
                 data = connection.recv(1024)
                 if data:
-                        try:
-                            msg = data.decode()
-                            decodedmsg = self.auth.decryptText(msg,self.secret_key)  # for decoding using secret key (contained in server_auth)
-                            if decodedmsg['action'] == "logout  ":
-                                print("bye bye")
-                            elif len(decodedmsg['action']) == 0:
-                                pass
+                    try:
+                        msg = data.decode()
+                        decodedmsg = self.auth.decryptText(
+                            msg, self.secret_key)
+                        if decodedmsg['action'] == "logout  ":
+                            print("bye bye")
+                        elif len(decodedmsg['action']) == 0:
+                            pass
 
-                            self.logMoveMade(decodedmsg['action'], decodedmsg['voltage'],decodedmsg['current'],decodedmsg['power'],decodedmsg['cumpower'])
-                            print("{} :: {} :: {} :: {} :: {}".format(decodedmsg['action'], decodedmsg['voltage'],decodedmsg['current'],decodedmsg['power'],decodedmsg['cumpower']))
+                        self.logMoveMade(decodedmsg['action'], decodedmsg['voltage'],
+                                         decodedmsg['current'], decodedmsg['power'], decodedmsg['cumpower'])
+                        print("{} :: {} :: {} :: {} :: {}".format(
+                            decodedmsg['action'], decodedmsg['voltage'], decodedmsg['current'], decodedmsg['power'], decodedmsg['cumpower']))
 
-                        except Exception as e:
-                            print(e)
+                    except Exception as e:
+                        print(e)
                 else:
-                     print('no more data from', client_address, file=sys.stderr)
-                     connection.close()
-                     break
-
+                    print('no more data from', client_address, file=sys.stderr)
+                    connection.close()
+                    break
 
     def getAction(self):
         global action
@@ -87,7 +86,7 @@ class server:
         threading.Timer(self.timeout, self.getAction).start()
 
     def logMoveMade(self, action_made, voltage, current, power, cumpower):
-        file = "log.csv";
+        file = "log.csv"
         if not os.path.isfile(file):
             with open(file, 'w') as f:
                 self.df.to_csv(f)
@@ -102,8 +101,10 @@ class server:
             data['power'] = power
             data['cumpower'] = cumpower
             data['correct'] = (action == action_made)
-            self.df = pd.DataFrame(data, index=[0])[self.columns].set_index('timestamp')
+            self.df = pd.DataFrame(data, index=[0])[
+                self.columns].set_index('timestamp')
             self.df.to_csv(f, header=False)
+
 
 if len(sys.argv) != 3:
     print('Invalid number of arguments')
@@ -113,8 +114,8 @@ if len(sys.argv) != 3:
 ip_addr = sys.argv[1]
 port_num = int(sys.argv[2])
 
-#IP address = 'x.x.x.x'
+# IP address = 'x.x.x.x'
 #Port = 8888
 
 
-my_server = server(ip_addr,port_num)
+my_server = server(ip_addr, port_num)

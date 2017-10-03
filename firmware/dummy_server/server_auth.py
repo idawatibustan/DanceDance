@@ -8,13 +8,12 @@ class server_auth:
         super(server_auth, self).__init__()
 
     def decryptText(self, cipherText, Key):
-        encodedMsg = (cipherText.split('|')[0])[1:-1]
-        decodedMSG = base64.b64decode(encodedMsg)
+        decodedMSG = base64.b64decode(cipherText)
         iv = decodedMSG[:16]
         secret_key = Key; 
         cipher = AES.new(secret_key,AES.MODE_CBC,iv)
         decryptedText = cipher.decrypt(decodedMSG[16:]).strip()
-        decryptedTextStr = str(decryptedText)
+        decryptedTextStr = decryptedText.decode('utf8')
         decryptedTextStr1 = decryptedTextStr[decryptedTextStr.find('#'):] 
         decryptedTextFinal = bytes(decryptedTextStr1[1:],'utf8').decode('utf8')
         action = decryptedTextFinal.split('|')[0]
