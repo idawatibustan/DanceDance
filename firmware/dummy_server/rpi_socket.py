@@ -7,32 +7,40 @@ import os
 import sys
 import time
 
+MSGLEN = 1024
+
 secret_key = b'this is dance12!'
-
-
-# target_ipaddr = sys.argv[1]
-# target_port = int(sys.argv[2])
+target_ipaddr = sys.argv[1]
+target_port = int(sys.argv[2])
 
 def main():
-    # print("Creating socket")
-    # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # s.connect((target_ipaddr, target_port))
-    # time.sleep(1)
-    # print("Connected to " + str(target_ipaddr) + " at port " + str(target_port))
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((target_ipaddr, target_port))
+    print("Connecting to " + str(target_ipaddr) + " at port " + str(target_port))
+    time.sleep(1)
     '''
-    Data required: action, voltage, current, power, cumpower
+    Data required: action, voltage, current, power, cumpower (in this order)
     (only action is returned from the ML script, everything else is sent direct from Mega)
     '''
-    data_map = {'action': 'random action', 'voltage': 100,
-                'current': 100, 'power': 100, 'cumpower': 100}
-    
-    data = '#'
-    for key, value in data_map.iteritems():
-        data += str(value) + '|'  
-    encoded_data = encrypt_text(bytes(data), secret_key)
+    try:
+        while True:
+            data_list = ['random action', 1, 2, 3, 4]
+            send_data(s, data_list)
+    except KeyboardInterrupt:
+        print("\nEnded connection with %s" % target_ipaddr)
+        s.close()
 
-    # print(decryptText(encoded_data, secret_key))
+    # # test encryption/decryption
+    # data_list = ['random action', 1, 2, 3, 4]
+    # data = "#"
+    # for element in data_list:
+    #     data += bytes(element).encode() + "|"
 
+    # print(data)
+    # encrypted_data = encrypt_text(bytes(data), secret_key)
+    # print(encrypted_data)
+    # decrypted_data = decryptText(encrypted_data, secret_key)
+    # print(decrypted_data)
 
 def encrypt_text(data, Key):
     '''
@@ -46,6 +54,22 @@ def encrypt_text(data, Key):
     encoded_data = base64.b64encode(encrypted_data)
     return encoded_data.encode()
 
+def send_data(s, data_list):
+    data = '#'
+    for element in data_list:
+        data += str(element) + '|'
+    encoded_data = encrypt_text(bytes(data), secret_key)
+    byte_encoded_data = bytearray(bytes(encoded_data))
+
+    print(type(byte_encoded_data))
+    
+    total_sent = 0
+    while total_sent < MSGLEN:
+        sent = s.send(byte_encoded_data[total_sent:])
+        if sent == 0:
+            pass
+            # print("NOTHING TO SEND")
+        total_sent += sent
 
 # PROVIDED EXAMPLE - REVERSE ENGINEER THIS
 def decryptText(cipherText, Key):

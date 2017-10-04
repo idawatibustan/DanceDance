@@ -58,7 +58,7 @@ class server:
                     try:
                         msg = data.decode()
                         decodedmsg = self.auth.decryptText(
-                            msg, self.secret_key)
+                            msg, self.secret_key) # error here
                         if decodedmsg['action'] == "logout  ":
                             print("bye bye")
                         elif len(decodedmsg['action']) == 0:
