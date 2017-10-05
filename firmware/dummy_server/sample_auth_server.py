@@ -41,7 +41,10 @@ class server:
             # Wait for a connection
             print('waiting for a connection', file=sys.stderr)
             connection, client_address = self.sock.accept()
-            self.secret_key = input("Enter the secret key: ")
+            # self.secret_key = input("Enter the secret key: ")
+            
+            key_input = input("Enter the secret key: ")
+            self.secret_key = bytes(key_input, 'utf-8') # Input from cmd line not in bytes
 
             print('connection from', client_address, file=sys.stderr)
 
@@ -58,14 +61,14 @@ class server:
                     try:
                         msg = data.decode()
                         decodedmsg = self.auth.decryptText(
-                            msg, self.secret_key) # error here
+                            msg, self.secret_key) # error here because secret_key not <bytes>
                         if decodedmsg['action'] == "logout  ":
                             print("bye bye")
                         elif len(decodedmsg['action']) == 0:
                             pass
 
                         self.logMoveMade(decodedmsg['action'], decodedmsg['voltage'],
-                                         decodedmsg['current'], decodedmsg['power'], decodedmsg['cumpower'])
+                                            decodedmsg['current'], decodedmsg['power'], decodedmsg['cumpower'])
                         print("{} :: {} :: {} :: {} :: {}".format(
                             decodedmsg['action'], decodedmsg['voltage'], decodedmsg['current'], decodedmsg['power'], decodedmsg['cumpower']))
 

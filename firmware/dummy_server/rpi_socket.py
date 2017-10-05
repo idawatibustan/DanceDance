@@ -6,8 +6,7 @@ import socket
 import os
 import sys
 import time
-
-MSGLEN = 1024
+import random
 
 secret_key = b'this is dance12!'
 target_ipaddr = sys.argv[1]
@@ -24,9 +23,11 @@ def main():
     '''
     try:
         while True:
-            data_list = ['random action', 1, 2, 3, 4]
+            data_list = ['random action', random.random(), random.random(), random.random(), random.random()]
+            print("Sending:\n%s" % data_list)
             send_data(s, data_list)
     except KeyboardInterrupt:
+        send_data(s, ['logout  ', 'END', 'END', 'END', 'END'])
         print("\nEnded connection with %s" % target_ipaddr)
         s.close()
 
@@ -34,10 +35,10 @@ def main():
     # data_list = ['random action', 1, 2, 3, 4]
     # data = "#"
     # for element in data_list:
-    #     data += bytes(element).encode() + "|"
+    #     data += str(element) + "|"
 
     # print(data)
-    # encrypted_data = encrypt_text(bytes(data), secret_key)
+    # encrypted_data = encrypt_text(bytes(data, 'utf8'), secret_key)
     # print(encrypted_data)
     # decrypted_data = decryptText(encrypted_data, secret_key)
     # print(decrypted_data)
@@ -52,24 +53,22 @@ def encrypt_text(data, Key):
     padded_data = Padding.pad(data, 16)
     encrypted_data = iv + cipher.encrypt(padded_data)
     encoded_data = base64.b64encode(encrypted_data)
-    return encoded_data.encode()
+    return encoded_data
 
 def send_data(s, data_list):
     data = '#'
     for element in data_list:
         data += str(element) + '|'
-    encoded_data = encrypt_text(bytes(data), secret_key)
-    byte_encoded_data = bytearray(bytes(encoded_data))
-
-    print(type(byte_encoded_data))
+    encoded_data = encrypt_text(bytes(data, 'utf-8'), secret_key)
     
     total_sent = 0
-    while total_sent < MSGLEN:
-        sent = s.send(byte_encoded_data[total_sent:])
+    while total_sent < len(encoded_data): # improve on logic here
+        sent = s.send(encoded_data[total_sent:])
         if sent == 0:
             pass
             # print("NOTHING TO SEND")
         total_sent += sent
+        time.sleep(1)
 
 # PROVIDED EXAMPLE - REVERSE ENGINEER THIS
 def decryptText(cipherText, Key):
