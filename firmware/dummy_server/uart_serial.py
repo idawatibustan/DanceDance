@@ -1,8 +1,8 @@
 import serial
 import time
 
-# opening port ttyAMA0 at baudrate 9600
-ser = serial.Serial('/dev/ttyAMA0', 9600)
+# opening port ttyAMA0 at baudrate 115200
+ser = serial.Serial('/dev/ttyAMA0', 115200)
 
 handshake_flag = 1
 read_sensor_flag = 0
@@ -10,11 +10,11 @@ read_sensor_flag = 0
 try:
     print("Initialising handshake sequence")
     while handshake_flag:
-        ser.write("ACK1".encode(encoding='utf_8'))
+        ser.write("1".encode(encoding='utf_8'))
         response = ser.readline() # this is blocking
-        if response.rstrip() == "ACK2":
+        if response.rstrip() == "2":
             print("Received ACK2, sending confirmation")
-            ser.write("ACK3".encode(encoding='utf_8'))
+            ser.write("3".encode(encoding='utf_8'))
             handshake_flag = 0
             read_sensor_flag = 1
 
@@ -27,6 +27,6 @@ try:
         print(received_string)
 except KeyboardInterrupt:
     print("\nClosing port /dev/ttyAMA0")
-    ser.write("scriptend".encode(encoding='utf_8'))
+    ser.write("4".encode(encoding='utf_8'))
     time.sleep(2)
     ser.close()

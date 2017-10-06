@@ -1,7 +1,7 @@
 // duo MPU-6050 Sketch
 // By Arduino User Tianze
 
-
+#include <Arduino_FreeRTOS.h>
 #include<Wire.h>
 
 const int N = 2;
