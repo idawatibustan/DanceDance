@@ -30,6 +30,7 @@ void setup()
     // setup for polling_sensors_task
     Wire.begin();
     Serial.begin(115200);
+    Serial1.begin(115200);
     for (i = 0; i < N; i++){
         Wire.beginTransmission(MPU_addr[i]);
         Wire.write(0x6B);  // PWR_MGMT_1 register
@@ -112,11 +113,12 @@ void tx_rpi_task(void * pvParameters)
     Serial.print("handshake_flag");
     Serial.println(handshake_flag);
     if (handshake_flag == 0) {    
-        while (Serial.available() > 0) {
+        while (Serial1.available() > 0) {
           Serial.println("in handshake");
-            char received = Serial.read();
+            char received = Serial1.read();
             incoming = received;
             if (incoming == '1') {
+                Serial1.println('2');
                 Serial.println('2');
                 incoming = 'x';
             } else if (incoming == '3') {
@@ -129,15 +131,11 @@ void tx_rpi_task(void * pvParameters)
     if (send_sensor_data == 1) {
         Serial.println("before tx");
         tx_dataframe_to_rpi();
-        while (Serial.available() > 0) {
+        while (Serial1.available() > 0) {
           //Serial.println("in tx");
-            char received = Serial.read();
+            char received = Serial1.read();
             incoming = received;
-            if (incoming == '4') {
-                handshake_flag = 0;
-                send_sensor_data = 0;
-                incoming = 'x';
-            } 
+            
         }
     }
     vTaskDelay(xDelay);

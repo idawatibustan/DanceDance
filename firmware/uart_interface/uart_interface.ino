@@ -12,7 +12,7 @@ struct Dataframe {
 
 void setup() {
   Serial.begin(9600);
-  
+  Serial1.begin(9600);
   handshake_flag = 0;
   send_sensor_data = 0;
 }
@@ -20,10 +20,11 @@ void setup() {
 
 void loop() {
   if (handshake_flag == 0) {    
-    while (Serial.available() > 0) {
-      char received = Serial.read();
+    while (Serial1.available() > 0) {
+      char received = Serial1.read();
       incoming += received;
       if (incoming == "ACK1") {
+        Serial1.println("ACK2");
         Serial.println("ACK2");
         incoming = "";
       } else if (incoming == "ACK3") {
@@ -35,9 +36,10 @@ void loop() {
   }
   if (send_sensor_data == 1) {
     compileData();
-    while (Serial.available() > 0) {
-      char received = Serial.read();
+    while (Serial1.available() > 0) {
+      char received = Serial1.read();
       incoming += received;
+      Serial1.println(incoming);
       Serial.println(incoming);
       if (incoming == "scriptend") {
         handshake_flag = 0;
@@ -76,8 +78,9 @@ void compileData() {
   sprintf(sensor_two, "%d %d %d %d %d %d %d", MPU_addr[1], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
 
   Serial.println(sensor_one);
+  Serial1.println(sensor_one);
   delay(500);
   Serial.println(sensor_two);
+  Serial1.println(sensor_two);
   delay(500);
 }
-
