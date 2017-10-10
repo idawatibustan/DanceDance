@@ -20,8 +20,8 @@ void setup(){
     Wire.endTransmission(true);
   }
   
-  Serial.begin(9600);
-  Serial1.begin(9600);
+  Serial.begin(57600);
+  Serial1.begin(57600);
 }
 void loop(){
   for (i = 0; i < N; i++){

@@ -95,7 +95,7 @@ void compileData()
 //  sprintf(sensor_two, "%d %d %d %d %d %d %d", MPU_addr[1], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
 
   Serial.println(sensor_one);
-  //delay(500);
+  delay(500);
 //  Serial.println(sensor_two);
   //delay(500);
 }
