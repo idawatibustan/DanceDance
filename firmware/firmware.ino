@@ -29,8 +29,8 @@ void setup()
 {  
     // setup for polling_sensors_task
     Wire.begin();
-    Serial.begin(115200);
-    Serial1.begin(115200);
+    Serial.begin(57600);
+    Serial1.begin(57600);
     for (i = 0; i < N; i++){
         Wire.beginTransmission(MPU_addr[i]);
         Wire.write(0x6B);  // PWR_MGMT_1 register
