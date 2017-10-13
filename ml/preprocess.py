@@ -11,6 +11,10 @@ order = 1
 fs = 25.0
 cutoff = 3.667
 
+def normalise_data(df_in):
+    df_normalised = pd.DataFrame(preprocessing.normalize(df_in.values), columns=df_in.columns)
+    return df_normalised
+
 def low_pass_plotting(df_in): 
     t = df_in.index
     for col in df.columns.values:
