@@ -36,6 +36,30 @@ ref:
 28/9/17 - Abandoned SPI for UART communications between Arduino and RPi
 
 IMPORTANT FILES/FOLDERS
-- MPU6050_duo_short_temp/
 - dummy_server/uart_serial.py
-- uart_interface/
+    - Handshaking with Arduino Mega, receives and write to .txt file (prints to console too)
+- just_sending/just_sending.ino
+    - Receives sensor data and sends them to the RPi
+    - No circular buffer, includes handshaking
+- firmware.ino
+    - Similar to just_sending.ino but with FreeRTOS implementation
+-rpi_socket.py
+     - Communicates with the evaluation server
+
+THINGS TO DO:
+1. Confirm rpi_socket.py works with a sample_auth_server.py being executed on a MAC
+2. Combine rpi_socket.py with uart_serial.py
+3. Python scripts should execute on power on
+
+RPi:
+1. Perform handshaking with Mega
+    a. Mega will perform hardware calibration
+    b. Handshake sequence completes when calibration is complete -> ACK is then sent to RPi to begin receiving
+2. Create socket and connect to the evaluation server
+    a. Action will be shown by the server
+    b. Perform action, receive data from Mega
+    c. Send data to ML script, identify the action and all relevant data
+    d. Package data and send to evaluation server
+
+Mega:
+1. 
