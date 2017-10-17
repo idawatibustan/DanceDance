@@ -13,10 +13,9 @@ struct Dataframe
 {
   int16_t AcX[N], AcY[N], AcZ[N], Tmp[N], GyX[N], GyY[N], GyZ[N];
 } dataframe;
-
+ 
 void setup()
 {
-  Serial.begin(57600);
   Wire.begin();
   int i;
   for (i = 0; i < N; i++)
@@ -28,19 +27,21 @@ void setup()
   }
   handshake_flag = 0;
   send_sensor_data = 0;
+  Serial1.begin(57600);
+  Serial.begin(57600);
 }
 
 void loop()
 {
   if (handshake_flag == 0)
   {
-    while (Serial.available() > 0)
+    while (Serial1.available() > 0)
     {
-      char received = Serial.read();
+      char received = Serial1.read();
       incoming += received;
       if (incoming == "1")
       {
-        Serial.println("2");
+        Serial1.println("2");
         incoming = "";
       }
       else if (incoming == "3")
@@ -54,11 +55,11 @@ void loop()
   if (send_sensor_data == 1)
   {
     compileData();
-    while (Serial.available() > 0)
+    while (Serial1.available() > 0)
     {
-      char received = Serial.read();
+      char received = Serial1.read();
       incoming += received;
-      Serial.println(incoming);
+      Serial1.println(incoming);
       if (incoming == "4")
       {
         handshake_flag = 0;
@@ -88,14 +89,18 @@ void compileData()
   }
 
   char sensor_one[200];
-  //char sensor_two[100];
+//  char sensor_two[200];
 //  sprintf(sensor_one, "%d %d %d %d %d %d %d ", MPU_addr[0], dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0]);
 //  sprintf(sensor_two, "%d %d %d %d %d %d %d", MPU_addr[1], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
-  sprintf(sensor_one, "%d %d %d %d %d %d %d %d %d %d %d %d", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
+  sprintf(sensor_one, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
 //  sprintf(sensor_two, "%d %d %d %d %d %d %d", MPU_addr[1], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
 
+  Serial1.println(sensor_one);
   Serial.println(sensor_one);
-  delay(500);
-//  Serial.println(sensor_two);
+  Serial1.flush();
+  Serial.flush();
+//  delay(500);
+//  Serial1.println(sensor_two);
   //delay(500);
 }
+
