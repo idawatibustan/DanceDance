@@ -41,6 +41,8 @@ L_STEPS = L_FRAME - L_OVLAP
 # data paths
 datapath = 'data_rec'
 data_ex = 'data_ext'
+if not os.path.exists(data_ex):
+    os.makedirs(data_ex)
 
 if __name__ = "__main__":
 
