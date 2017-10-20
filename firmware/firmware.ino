@@ -66,8 +66,8 @@ class DataframeBuffer {
 
 void setup() {
   Wire.begin();
-  Serial.begin(74880);
-  Serial1.begin(74880);
+  //Serial.begin(57600);
+  Serial1.begin(57600);
   // wake both MPUs
   Wire.beginTransmission(MPU_1_address);
   Wire.write(0x6B);  // PWR_MGMT_1 register
@@ -183,8 +183,8 @@ void comms_task(void * pvParameters) {
 //    Serial.print("send_sensor_data" ); Serial.println(send_sensor_data);
     if (handshake_flag == 0) {
 //      Serial.println("in comms task");
-      while (Serial.available() > 0) {
-        char inc = Serial.read();
+      while (Serial1.available() > 0) {
+        char inc = Serial1.read();
         if (inc == '1') {
           Serial1.println('2');
         } else if (inc == '3') {
@@ -198,6 +198,13 @@ void comms_task(void * pvParameters) {
     }
     if (send_sensor_data == 1) {
       tx_dataframe_to_rpi();
+      while (Serial1.available() > 0) {
+      	char inc = Serial1.read();
+      	if (inc == '4') {
+      		handshake_flag = 0;
+      		send_sensor_data = 0;
+      	}
+      }
     }
 
     vTaskDelay(xDelay);
