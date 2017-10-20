@@ -24,10 +24,10 @@ def extract_feature(window):
 
     df['mean_gx0'] = [window.mean().gx0]
     df['mean_gy0'] = [window.mean().gy0]
-    df['mean_gz0'] = [window.mean().gz0]
+    # df['mean_gz0'] = [window.mean().gz0]
     df['mean_gx1'] = [window.mean().gx1]
     df['mean_gy1'] = [window.mean().gy1]
-    df['mean_gz1'] = [window.mean().gz1]
+    # df['mean_gz1'] = [window.mean().gz1]
 
     # STD data
     df['std_ax0'] = [window.std().ax0]
@@ -39,10 +39,10 @@ def extract_feature(window):
 
     df['std_gx0'] = [window.std().gx0]
     df['std_gy0'] = [window.std().gy0]
-    df['std_gz0'] = [window.std().gz0]
+    # df['std_gz0'] = [window.std().gz0]
     df['std_gx1'] = [window.std().gx1]
     df['std_gy1'] = [window.std().gy1]
-    df['std_gz1'] = [window.std().gz1]
+    # df['std_gz1'] = [window.std().gz1]
 
     # Median data
     df['median_ax0'] = [window.median().ax0]
@@ -54,10 +54,10 @@ def extract_feature(window):
 
     df['median_gx0'] = [window.median().gx0]
     df['median_gy0'] = [window.median().gy0]
-    df['median_gz0'] = [window.median().gz0]
+    # df['median_gz0'] = [window.median().gz0]
     df['median_gx1'] = [window.median().gx1]
     df['median_gy1'] = [window.median().gy1]
-    df['median_gz1'] = [window.median().gz1]
+    # df['median_gz1'] = [window.median().gz1]
 
     # Mad data
     df['mad_ax0'] = [window.mad().ax0]
@@ -69,10 +69,10 @@ def extract_feature(window):
 
     df['mad_gx0'] = [window.mad().gx0]
     df['mad_gy0'] = [window.mad().gy0]
-    df['mad_gz0'] = [window.mad().gz0]
+    # df['mad_gz0'] = [window.mad().gz0]
     df['mad_gx1'] = [window.mad().gx1]
     df['mad_gy1'] = [window.mad().gy1]
-    df['mad_gz1'] = [window.mad().gz1]
+    # df['mad_gz1'] = [window.mad().gz1]
 
     # Max
     df['max_ax0'] = [window['ax0'].max(axis=0)]
@@ -84,10 +84,10 @@ def extract_feature(window):
 
     df['max_gx0'] = [window['gx0'].max(axis=0)]
     df['max_gy0'] = [window['gy0'].max(axis=0)]
-    df['max_gz0'] = [window['gz0'].max(axis=0)]
+    # df['max_gz0'] = [window['gz0'].max(axis=0)]
     df['max_gx1'] = [window['gx1'].max(axis=0)]
     df['max_gy1'] = [window['gy1'].max(axis=0)]
-    df['max_gz1'] = [window['gz1'].max(axis=0)]
+    # df['max_gz1'] = [window['gz1'].max(axis=0)]
 
     # Min
     df['min_ax0'] = [window['ax0'].min(axis=0)]
@@ -99,10 +99,10 @@ def extract_feature(window):
 
     df['min_gx0'] = [window['gx0'].min(axis=0)]
     df['min_gy0'] = [window['gy0'].min(axis=0)]
-    df['min_gz0'] = [window['gz0'].min(axis=0)]
+    # df['min_gz0'] = [window['gz0'].min(axis=0)]
     df['min_gx1'] = [window['gx1'].min(axis=0)]
     df['min_gy1'] = [window['gy1'].min(axis=0)]
-    df['min_gz1'] = [window['gz1'].min(axis=0)]
+    # df['min_gz1'] = [window['gz1'].min(axis=0)]
 
 
     # Corr
