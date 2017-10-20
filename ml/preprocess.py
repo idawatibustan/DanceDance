@@ -1,7 +1,8 @@
 # plot timeseries data
 
+import os
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, basename
 # import matplotlib as mpl
 import numpy as np
 import pandas as pd
@@ -44,7 +45,7 @@ data_ex = 'data_ext'
 if not os.path.exists(data_ex):
     os.makedirs(data_ex)
 
-if __name__ = "__main__":
+if __name__ == "__main__":
 
     # load data
     csvfiles = [ f for f in listdir(datapath) if isfile(join(datapath, f)) and '.csv' in f ]
@@ -68,8 +69,8 @@ if __name__ = "__main__":
         for j in np.arange(0, max_len, L_STEPS):
             # get & plot segment
             df_new = df[ j : j+L_FRAME ]
-            plot_gyro(df_new)
-            plot_acc(df_new)
+#            plot_gyro(df_new)
+#            plot_acc(df_new)
 #            df_filtered = low_pass(df_new)
 #            plot_gyro(df_filtered)
 #            plot_acc(df_filtered)
@@ -81,12 +82,12 @@ if __name__ = "__main__":
             dataset = dataset.append( feats, ignore_index = True )
 
         # saving dataset to file_extracted.csv
-        csvfile_new = join( data_ex, csvfile.split(".")[0]+"_extracted.csv" )
-        dataset.to_csv( csvfile_new, index_col=False )
+        csvfile_new = join( data_ex, basename(csvfile.split(".")[0]+"_extracted.csv") )
+        dataset.to_csv( csvfile_new, index=False )
 
         # append to cobined dataframe
         df_ext_all = pd.concat([df_ext_all, dataset])
 
     # save combined dataframe -> df_ext_all
     csv_all = join( data_ex, "full_dataset_extracted.csv" )
-    df_ext_all.to_csv( csv_all, index_col=False )
+    df_ext_all.to_csv( csv_all, index=False )
