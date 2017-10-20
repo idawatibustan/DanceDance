@@ -32,6 +32,11 @@ def low_pass(df_in):
         df_filtered[col] = butter_lowpass_filter(df_in[col], cutoff, fs, order)
     return df_filtered
 
+def is_clean(df):
+    if np.any(pd.isnull(df)):
+        return False
+    return True
+
 # segment param
 FREQ = 60
 T_LEN = 2.4
@@ -79,15 +84,17 @@ if __name__ == "__main__":
             feats = ts.extract_feature( df_new )
             # add label column
             feats['label'] = label
-            dataset = dataset.append( feats, ignore_index = True )
+            feats_c = feats.drop('corr_gxz0', axis=1).drop('corr_gyz0', axis=1).drop('corr_gxz1', axis=1).drop('corr_gyz1', axis=1)
+            if is_clean(feats_c):
+                dataset = dataset.append( feats_c, ignore_index = True )
 
         # saving dataset to file_extracted.csv
-        csvfile_new = join( data_ex, basename(csvfile.split(".")[0]+"_extracted.csv") )
-        dataset.to_csv( csvfile_new, index=False )
+        #csvfile_new = join( data_ex, basename(csvfile.split(".")[0]+"_extracted.csv") )
+        #dataset.to_csv( csvfile_new, index=False )
 
         # append to cobined dataframe
         df_ext_all = pd.concat([df_ext_all, dataset])
 
     # save combined dataframe -> df_ext_all
-    csv_all = join( data_ex, "full_dataset_extracted.csv" )
+    csv_all = join( data_ex, "full_checked_extracted.csv" )
     df_ext_all.to_csv( csv_all, index=False )
