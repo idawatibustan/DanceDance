@@ -28,3 +28,9 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+*.ipynb
+
+# Dataset folders
+ml/data_rec*
+ml/data_ext*

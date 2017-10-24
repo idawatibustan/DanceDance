@@ -1,9 +1,6 @@
 # dancedance
 dance detection wearable device
 
-## dir: software_cp
-1. Install dependencies with
-```pip install -r requirements.txt```
+## This repository includes all the components required to build `dance dance`
 
-P.S. For mac user, set the back end of MacOSX to render image when using matplotlib
-See <a href="https://stackoverflow.com/questions/21784641/installation-issue-with-matplotlib-python">here</a>
+Dataset can be downloaded from <a>https://goo.gl/tg1qXQ</a>
