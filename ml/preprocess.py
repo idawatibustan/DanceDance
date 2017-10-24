@@ -19,7 +19,7 @@ def normalise_data(df_in):
     df_normalised = pd.DataFrame(preprocessing.normalize(df_in.values), columns=df_in.columns)
     return df_normalised
 
-def low_pass_plotting(df_in): 
+def low_pass_plotting(df_in):
     t = df_in.index
     for col in df.columns.values:
         y = butter_lowpass_filter(df_in[col], cutoff, fs, order)
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     # load data
     csvfiles = [ f for f in listdir(datapath) if isfile(join(datapath, f)) and '.csv' in f ]
     df_ext_all = pd.DataFrame()
-    
+
     # iterate through all files
     # load it to df
     for f in csvfiles:
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         df = pd.read_csv(csvfile)
 
         # do something to df
-        label = f.split("_")[0] 
+        label = f.split("_")[0]
         print label
 
         # splitting up lines & perform extraction
@@ -84,7 +84,7 @@ if __name__ == "__main__":
             feats = ts.extract_feature( df_new )
             # add label column
             feats['label'] = label
-            feats_c = feats.drop('corr_gxz0', axis=1).drop('corr_gyz0', axis=1).drop('corr_gxz1', axis=1).drop('corr_gyz1', axis=1)
+            # feats_c = feats.drop('corr_gxz0', axis=1).drop('corr_gyz0', axis=1).drop('corr_gxz1', axis=1).drop('corr_gyz1', axis=1)
             if is_clean(feats_c):
                 dataset = dataset.append( feats_c, ignore_index = True )
 
