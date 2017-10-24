@@ -84,13 +84,12 @@ if __name__ == "__main__":
             feats = ts.extract_feature( df_new )
             # add label column
             feats['label'] = label
-            # feats_c = feats.drop('corr_gxz0', axis=1).drop('corr_gyz0', axis=1).drop('corr_gxz1', axis=1).drop('corr_gyz1', axis=1)
-            if is_clean(feats_c):
-                dataset = dataset.append( feats_c, ignore_index = True )
+            if is_clean(feats):
+                dataset = dataset.append( feats, ignore_index = True )
 
         # saving dataset to file_extracted.csv
-        #csvfile_new = join( data_ex, basename(csvfile.split(".")[0]+"_extracted.csv") )
-        #dataset.to_csv( csvfile_new, index=False )
+        csvfile_new = join( data_ex, basename(csvfile.split(".")[0]+"_extracted.csv") )
+        dataset.to_csv( csvfile_new, index=False )
 
         # append to cobined dataframe
         df_ext_all = pd.concat([df_ext_all, dataset])
