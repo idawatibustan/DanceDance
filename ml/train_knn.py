@@ -34,7 +34,7 @@ knnclf = knn(n_neighbors=10 , n_jobs=2 , weights='uniform')
 
 knnModel = knnclf.fit(trainData , trainLabel)
 
-#pickle.dump(knnModel, open('first_activities.knn','wb'))
+#pickle.dump(knnModel, open('classifier/first_activities.knn','wb'))
 
 print("Training set score for KNN: %f" % knnModel.score(trainData , trainLabel))
 print("Testing  set score for KNN: %f" % knnModel.score(testData  , testLabel ))
