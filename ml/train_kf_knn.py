@@ -1,5 +1,5 @@
-from os import makedirs
-from os.path import exists
+from os import makedirs, remove
+from os.path import exists, isfile
 from sklearn.neighbors import KNeighborsClassifier as knn
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import KFold
@@ -11,6 +11,8 @@ import pickle
 
 if not exists('log'):
     makedirs('log')
+if isfile('log/training_knn_info_complete.log'):
+    remove('log/training_knn_info_complete.log')
 
 def train_knn(train_set, test_set):
     trainData  = train_set.drop('label' , axis=1).values
@@ -39,6 +41,7 @@ def train_knn(train_set, test_set):
     # Compute confusion matrix
     cnf_matrix = confusion_matrix(testLabel, y_pred)
     
+
     log = activate_logger('train_knn', 'log/training_knn_info_complete.log')
     log.info("cnf_matrix\n %s" % cnf_matrix)
 
@@ -47,10 +50,13 @@ def train_knn(train_set, test_set):
             'test_conf': test_conf
            }
 
-def activate_logger(name, filename):
+def activate_logger(name, filename, append=True):
     import logging
     logger = logging.getLogger(name)
-    hdlr = logging.FileHandler(filename, 'w')
+    if append:
+        hdlr = logging.FileHandler(filename)
+    else:
+        hdlr = logging.FileHandler(filename, 'w')
     formatter = logging.Formatter('%(asctime)s %(name)s - %(levelname)s | %(message)s')
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
@@ -59,7 +65,7 @@ def activate_logger(name, filename):
 
 if __name__ == "__main__":
     # activate logger
-    log = activate_logger('train_kf', 'log/training_knn_kf_info.log')
+    log = activate_logger('train_kf', 'log/training_knn_kf_info.log', append=False)
     
     # load processed data
     df = pd.read_csv('data_ext/full_checked_extracted.csv')
@@ -91,7 +97,8 @@ if __name__ == "__main__":
         count += 1
 
     # sort_by max test_conf and train_conf
-    mf = mf.sort_values(['train_conf', 'test_conf']).reset_index(drop=True)
+    mf = mf.sort_values('train_conf', ascending=False).reset_index(drop=True)
+    mf = mf.sort_values('test_conf', ascending=False).reset_index(drop=True)
     print mf
     log.info("model_table\n %s" % mf)
     
