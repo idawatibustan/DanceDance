@@ -3,8 +3,8 @@ import numpy as np
 from random import randint
 
 # For testing only
-sample_data = df = pd.DataFrame({'X': range(128), 'Y': [2*i for i in range(128)], 'Z': [5*i for i in range(128)]})
-features = ["mean", "std", "max", "min", "median", "mad", "corr"]
+# sample_data = df = pd.DataFrame({'X': range(128), 'Y': [2*i for i in range(128)], 'Z': [5*i for i in range(128)]})
+# features = ["mean", "std", "max", "min", "median", "mad", "corr"]
 
 def extract_feature(window):
     # ax0,ay0,az0,gx0,gy0,gz0,ax1,ay1,az1,gx1,gy1,gz1
@@ -114,10 +114,10 @@ def extract_feature(window):
     df['corr_ayz1'] = [window['ay1'].corr(window['az1'])]
 
     df['corr_gxy0'] = [window['gx0'].corr(window['gy0'])]
-    df['corr_gxz0'] = [window['gx0'].corr(window['gz0'])]
-    df['corr_gyz0'] = [window['gy0'].corr(window['gz0'])]
+    # df['corr_gxz0'] = [window['gx0'].corr(window['gz0'])]
+    # df['corr_gyz0'] = [window['gy0'].corr(window['gz0'])]
     df['corr_gxy1'] = [window['gx1'].corr(window['gy1'])]
-    df['corr_gxz1'] = [window['gx1'].corr(window['gz1'])]
-    df['corr_gyz1'] = [window['gy1'].corr(window['gz1'])]
+    # df['corr_gxz1'] = [window['gx1'].corr(window['gz1'])]
+    # df['corr_gyz1'] = [window['gy1'].corr(window['gz1'])]
 
     return df
