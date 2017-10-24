@@ -10,20 +10,28 @@ def plot_frame(df):
         plt.plot(df.index, df[col])
         plt.show()
 
-def plot_gyro(df):
+def plot_gyro(df, label=None):
     gyros = [['gx0','gy0','gz0'],['gx1','gy1','gz1']]
     for num in gyros:
         plt.figure(figsize=(16,3))
-        plt.title("gyro")
+        if label:
+            plt.title("%s - gyro %s" % (label, num))
+            plt.legend()
+        else:
+            plt.title("gyro %s" % num)
+            plt.legend()
         for col in num:
             plt.plot(df.index, df[col])
         plt.show()
         
-def plot_acc(df):
+def plot_acc(df, label=None):
     gyros = [['ax0','ay0','az0'],['ax1','ay1','az1']]
     for num in gyros:
         plt.figure(figsize=(16,3))
-        plt.title("acc")
+        if label:
+            plt.title("%s - acc %s" % (label, num))
+        else:
+            plt.title("acc %s" % num)
         for col in num:
             plt.plot(df.index, df[col])
         plt.show()
