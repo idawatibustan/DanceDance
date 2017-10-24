@@ -63,3 +63,19 @@ RPi:
 
 Mega:
 1. 
+
+### CONNECTING RPI TO YOUR NETWORK OF CHOICE
+
+###### Note: The RPi is unable to connect directly to the school's network due to how it was configured. A workaround for this is using your Laptop as a hotspot for the RPi to connect indirectly
+
+##### You'll require a monitor and input devices (keyboard & mouse)
+1. Setup your hotspot SSID and password if you haven't already
+2. `sudo nano /etc/wpa_supplicant/wpa_supplicant.conf`
+3. Scroll to the end of the file and add the following lines
+    - network={
+        ssid="Test Wifi Network"
+        psk="SecretPassWord"
+        }
+    - Or follow the format already present in the file
+4. `sudo reboot` - to reboot the device for the changes to take effect at the next boot up
+5. `ifconfig wlan0` - look out for inet addr:<IP ADDRESS> to confirm that you're connected to your network of choice
