@@ -1,0 +1,24 @@
+2017-10-24 20:31:19,656 train_kf - INFO | in : 1719 430
+2017-10-24 20:31:20,216 train_kf - INFO | in : 1719 430
+2017-10-24 20:31:20,664 train_kf - INFO | in : 1719 430
+2017-10-24 20:31:21,017 train_kf - INFO | in : 1719 430
+2017-10-24 20:31:21,465 train_kf - INFO | in : 1720 429
+2017-10-24 20:31:21,909 train_kf - INFO | model_table
+                                                model  test_conf  train_conf  \
+0  KNeighborsClassifier(algorithm='auto', leaf_si...   0.990698    0.984875   
+1  KNeighborsClassifier(algorithm='auto', leaf_si...   0.990676    0.985465   
+2  KNeighborsClassifier(algorithm='auto', leaf_si...   0.983721    0.986620   
+3  KNeighborsClassifier(algorithm='auto', leaf_si...   0.983721    0.986620   
+4  KNeighborsClassifier(algorithm='auto', leaf_si...   0.981395    0.987784   
+
+   round  
+0      3  
+1      4  
+2      0  
+3      1  
+4      2  
+2017-10-24 20:31:22,114 train_kf - INFO | Selected model <bound method Series.round of model         KNeighborsClassifier(algorithm='auto', leaf_si...
+test_conf                                              0.990698
+train_conf                                             0.984875
+round                                                         3
+Name: 0, dtype: object> with conf: 0.984874927283, 0.990697674419
