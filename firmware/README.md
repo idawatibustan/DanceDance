@@ -79,3 +79,19 @@ Mega:
     - Or follow the format already present in the file
 4. `sudo reboot` - to reboot the device for the changes to take effect at the next boot up
 5. `ifconfig wlan0` - look out for inet addr:<IP ADDRESS> to confirm that you're connected to your network of choice
+
+### COLLECTING DATA
+
+1. Make sure the RPi is connected to your device's hotspot
+2. SSH into RPi
+    - `ssh pi@<IP ADDRESS>`
+    - password: dance12
+3. `cd Documents/pi_socket/` 
+4. `python rpi_socket.py`
+    - The RPi will start receiving data from the Mega
+    - Outputs to a file plus prints to console for debugging purposes
+
+###### If nothing is being printed out (your output file will probably be empty as well)
+1. Check that the correct .ino file is uploaded to the Mega (The one that sends data through the Serial1 port)
+2. Reset the Mega if it's confirmed the correct .ino file (The handshaking sequence might have been interrupted)
+    - Make sure to also reset the python script
