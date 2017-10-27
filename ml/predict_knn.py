@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 from sklearn.neighbors import KNeighborsClassifier as knn
 from sklearn.metrics import confusion_matrix
-from plot_helper import plot_confusion_matrix
+# from plot_helper import plot_confusion_matrix
 
 # csvfile = 'test.csv'
 # df = pd.read_csv(csvfile)
@@ -29,6 +29,12 @@ def predict(df):
         f = process_data(df)
     except ValueError as e:
         print "ValueError:", e
+        return 11
+    except AttributeError as e:
+        print "AttributeError:", e
+        return 11
+    except Exception as e:
+        print "Exception:", e
         return 11
     result = loaded_knn.predict(f)
     return result[0]
