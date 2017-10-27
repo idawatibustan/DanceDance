@@ -87,15 +87,15 @@ void compileData()
     dataframe.GyY[i] = Wire.read() << 8 | Wire.read();                           // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
     dataframe.GyZ[i] = Wire.read() << 8 | Wire.read();                           // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
   }
-  long checksum = dataframe.AcX[0] + dataframe.AcY[0] + dataframe.AcZ[0] + dataframe.Tmp[0] + dataframe.GyX[0] + dataframe.GyY[0] + dataframe.GyZ[0] +
-    dataframe.AcX[1] + dataframe.AcY[1] + dataframe.AcZ[1] + dataframe.Tmp[1] + dataframe.GyX[1] + dataframe.GyY[1] + dataframe.GyZ[1];
+  long checksum = dataframe.AcX[0] + dataframe.AcY[0] + dataframe.AcZ[0] + dataframe.GyX[0] + dataframe.GyY[0] + dataframe.GyZ[0] +
+    dataframe.AcX[1] + dataframe.AcY[1] + dataframe.AcZ[1] + dataframe.GyX[1] + dataframe.GyY[1] + dataframe.GyZ[1];
 
   char sensor_one[2000];
   // with checksum  
-//  sprintf(sensor_one, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1], checksum);
+  sprintf(sensor_one, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1], checksum);
 
   // without checksum
-  sprintf(sensor_one, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
+//  sprintf(sensor_one, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1]);
 
   Serial1.println(sensor_one);
   Serial.println(sensor_one);
