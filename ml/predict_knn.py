@@ -29,10 +29,12 @@ def predict(df):
         f = process_data(df)
     except ValueError as e:
         print "ValueError:", e
-        return
-    result = loaded_knn.predict_proba(f)
-    print result
+        return 11
+    result = loaded_knn.predict(f)
+    return result[0]
 
-
-if __name__ == '__main__':
-    main()
+# if __name__ == "__main__":
+#     r = predict(df)
+#     print type(r)
+#     print r[0]
+#     print type(r[0])
