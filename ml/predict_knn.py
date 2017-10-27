@@ -23,6 +23,7 @@ def process_data(window):
         raise ValueError("NaN data found, window can't be processed")
     return feats
 
+def main():
     try:
         f = process_data(df)
     except ValueError as e:
