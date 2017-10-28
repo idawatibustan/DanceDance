@@ -121,3 +121,120 @@ def extract_feature(window):
     # df['corr_gyz1'] = [window['gy1'].corr(window['gz1'])]
 
     return df
+
+def extract_feature_upgrade(window):
+    # ax0,ay0,az0,gx0,gy0,gz0,ax1,ay1,az1,gx1,gy1,gz1
+
+    # Store extracted data into df
+    df = pd.DataFrame()
+
+    # window is a dataframe that contains 128 period of x y and z
+
+    # Mean data
+    df['mean_ax0'] = [window.ax0.values.mean()]
+    df['mean_ay0'] = [window.ay0.values.mean()]
+    df['mean_az0'] = [window.az0.values.mean()]
+    df['mean_ax1'] = [window.ax1.values.mean()]
+    df['mean_ay1'] = [window.ay1.values.mean()]
+    df['mean_az1'] = [window.az1.values.mean()]
+
+    df['mean_gx0'] = [window.gx0.values.mean()]
+    df['mean_gy0'] = [window.gy0.values.mean()]
+    # df['mean_gz0'] = [window.gz0.values.mean()]
+    df['mean_gx1'] = [window.gx1.values.mean()]
+    df['mean_gy1'] = [window.gy1.values.mean()]
+    # df['mean_gz1'] = [window.gz1.values.mean()]
+
+    # STD data
+    df['std_ax0'] = [window.ax0.values.std()]
+    df['std_ay0'] = [window.ay0.values.std()]
+    df['std_az0'] = [window.az0.values.std()]
+    df['std_ax1'] = [window.ax1.values.std()]
+    df['std_ay1'] = [window.ay1.values.std()]
+    df['std_az1'] = [window.az1.values.std()]
+
+    df['std_gx0'] = [window.gx0.values.std()]
+    df['std_gy0'] = [window.gy0.values.std()]
+    # df['std_gz0'] = [window.gz0.values.std()]
+    df['std_gx1'] = [window.gx1.values.std()]
+    df['std_gy1'] = [window.gy1.values.std()]
+    # df['std_gz1'] = [window.gz1.values.std()]
+
+    # Median data
+    df['median_ax0'] = [np.median(window.ax0.values)]
+    df['median_ay0'] = [np.median(window.ay0.values)]
+    df['median_az0'] = [np.median(window.az0.values)]
+    df['median_ax1'] = [np.median(window.ax1.values)]
+    df['median_ay1'] = [np.median(window.ay1.values)]
+    df['median_az1'] = [np.median(window.az1.values)]
+
+    df['median_gx0'] = [np.median(window.gx0.values)]
+    df['median_gy0'] = [np.median(window.gy0.values)]
+    # df['median_gz0'] = [np.median(window.gz0.values)]
+    df['median_gx1'] = [np.median(window.gx1.values)]
+    df['median_gy1'] = [np.median(window.gy1.values)]
+    # df['median_gz1'] = [np.median(window.gz1.values)]
+
+    # Mad data
+    mads = window.mad()
+    df['mad_ax0'] = [mads.ax0]
+    df['mad_ay0'] = [mads.ay0]
+    df['mad_az0'] = [mads.az0]
+    df['mad_ax1'] = [mads.ax1]
+    df['mad_ay1'] = [mads.ay1]
+    df['mad_az1'] = [mads.az1]
+
+    df['mad_gx0'] = [mads.gx0]
+    df['mad_gy0'] = [mads.gy0]
+    # df['mad_gz0'] = [mads.gz0]
+    df['mad_gx1'] = [mads.gx1]
+    df['mad_gy1'] = [mads.gy1]
+    # df['mad_gz1'] = [mads.gz1]
+
+    # Max
+    df['max_ax0'] = [window.ax0.values.max()]
+    df['max_ay0'] = [window.ay0.values.max()]
+    df['max_az0'] = [window.az0.values.max()]
+    df['max_ax1'] = [window.ax1.values.max()]
+    df['max_ay1'] = [window.ay1.values.max()]
+    df['max_az1'] = [window.az1.values.max()]
+
+    df['max_gx0'] = [window.gx0.values.max()]
+    df['max_gy0'] = [window.gy0.values.max()]
+    # df['max_gz0'] = [window.gz0.values.max()]
+    df['max_gx1'] = [window.gx1.values.max()]
+    df['max_gy1'] = [window.gy1.values.max()]
+    # df['max_gz1'] = [window.gz1.values.max()]
+
+    # Min
+    df['min_ax0'] = [window.ax0.values.min()]
+    df['min_ay0'] = [window.ay0.values.min()]
+    df['min_az0'] = [window.az0.values.min()]
+    df['min_ax1'] = [window.ax1.values.min()]
+    df['min_ay1'] = [window.ay1.values.min()]
+    df['min_az1'] = [window.az1.values.min()]
+
+    df['min_gx0'] = [window.gx0.values.min()]
+    df['min_gy0'] = [window.gy0.values.min()]
+    # df['min_gz0'] = [window.gz0.values.min()]
+    df['min_gx1'] = [window.gx1.values.min()]
+    df['min_gy1'] = [window.gy1.values.min()]
+    # df['min_gz1'] = [window.gz1.values.min()]
+
+
+    # Corr
+    df['corr_axy0'] = np.correlate(window.ax0.values, window.ay0.values)
+    df['corr_axz0'] = np.correlate(window.ax0.values, window.az0.values)
+    df['corr_ayz0'] = np.correlate(window.ay0.values, window.az0.values)
+    df['corr_axy1'] = np.correlate(window.ax1.values, window.ay1.values)
+    df['corr_axz1'] = np.correlate(window.ax1.values, window.az1.values)
+    df['corr_ayz1'] = np.correlate(window.ay1.values, window.az1.values)
+
+    df['corr_gxy0'] = np.correlate(window.gx0.values, window.gy0.values)
+    # df['corr_gxz0'] = np.correlate(window.gx0.values, window.gz0.values)
+    # df['corr_gyz0'] = np.correlate(window.gy0.values, window.gz0.values)
+    df['corr_gxy1'] = np.correlate(window.gx1.values, window.gy1.values)
+    # df['corr_gxz1'] = np.correlate(window.gx1.values, window.gz1.values)
+    # df['corr_gyz1'] = np.correlate(window.gy1.values, window.gz1.values)
+
+    return df
