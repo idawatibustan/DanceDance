@@ -145,6 +145,21 @@ def extract_feature_upgrade(window):
     df['mean_gy1'] = [window.gy1.values.mean()]
     # df['mean_gz1'] = [window.gz1.values.mean()]
 
+    # Mean data
+    df['mean_abs_ax0'] = df['mean_ax0'].abs()
+    df['mean_abs_ay0'] = df['mean_ay0'].abs()
+    df['mean_abs_az0'] = df['mean_az0'].abs()
+    df['mean_abs_ax1'] = df['mean_ax1'].abs()
+    df['mean_abs_ay1'] = df['mean_ay1'].abs()
+    df['mean_abs_az1'] = df['mean_az1'].abs()
+
+    df['mean_abs_gx0'] = df['mean_gx0'].abs()
+    df['mean_abs_gy0'] = df['mean_gy0'].abs()
+    # df['mean_abs_gz0'] = df['mean_gz0'].abs()
+    df['mean_abs_gx1'] = df['mean_gx1'].abs()
+    df['mean_abs_gy1'] = df['mean_gy1'].abs()
+    # df['mean_abs_gz1'] = df['mean_gz1'].abs()
+
     # STD data
     df['std_ax0'] = [window.ax0.values.std()]
     df['std_ay0'] = [window.ay0.values.std()]
@@ -221,6 +236,20 @@ def extract_feature_upgrade(window):
     df['min_gy1'] = [window.gy1.values.min()]
     # df['min_gz1'] = [window.gz1.values.min()]
 
+    # Range
+    df['range_ax0'] = df['max_ax0'] - df['min_ax0']
+    df['range_ay0'] = df['max_ay0'] - df['min_ay0']
+    df['range_az0'] = df['max_az0'] - df['min_az0']
+    df['range_ax1'] = df['max_ax1'] - df['min_ax1']
+    df['range_ay1'] = df['max_ay1'] - df['min_ay1']
+    df['range_az1'] = df['max_az1'] - df['min_az1']
+
+    df['range_gx0'] = df['max_gx0'] - df['min_gx0']
+    df['range_gy0'] = df['max_gy0'] - df['min_gy0']
+    # df['range_gz0'] = df['max_gz0'] - df['min_gz0']
+    df['range_gx1'] = df['max_gx1'] - df['min_gx1']
+    df['range_gy1'] = df['max_gy1'] - df['min_gy1']
+    # df['range_gz1'] = df['max_gz1'] - df['min_gz1']
 
     # Corr
     df['corr_axy0'] = np.correlate(window.ax0.values, window.ay0.values)
