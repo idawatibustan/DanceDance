@@ -37,17 +37,20 @@ if __name__=="__main__":
         data_file.write(header)
         while read_sensor_flag:
             df = pd.DataFrame()
+            print "Empty", df
+            ser.flushInput()
             count = 0
             while(count<145):
                 received_string = ser.readline()
                 if (len(received_string)>10):
                     data_file.write(received_string)
-                    print(received_string)
+                    # print(received_string)
+                    # row = pd.read_csv(io.BytesIO(header+received_string), sep=',' )
                     row = pd.read_csv(io.BytesIO(header+received_string.rsplit(',', 1)[0]), sep=',' )
-                    print header+received_string.rsplit(',', 1)[0]
+                    # print header+received_string.rsplit(',', 1)[0]
                     df = df.append(row, ignore_index = True)
                     count = count + 1
-            print df
+            print "Appended", df
             prediction = predict_knn.predict(df)
             print "Prediction!!!!!!!!!", prediction
             if prediction < 11:
@@ -55,6 +58,13 @@ if __name__=="__main__":
 
 
     except KeyboardInterrupt:
+        print("\nClosing port /dev/ttyAMA0")
+        ser.write("4".encode(encoding='utf_8'))
+        time.sleep(2)
+        data_file.close()
+        ser.close()
+
+    except:
         print("\nClosing port /dev/ttyAMA0")
         ser.write("4".encode(encoding='utf_8'))
         time.sleep(2)
