@@ -7,6 +7,7 @@ const int MPU_addr[N] = {0x68, 0x69}; // I2C address of the first MPU-6050
 
 int handshake_flag;
 int send_sensor_data;
+int count;
 String incoming;
 
 struct Dataframe
@@ -27,6 +28,7 @@ void setup()
   }
   handshake_flag = 0;
   send_sensor_data = 0;
+  count = 0;
   Serial1.begin(57600);
   Serial.begin(57600);
 }
@@ -54,23 +56,26 @@ void loop()
   }
   if (send_sensor_data == 1)
   {
-    long count = 0;
     compileData();
     while (Serial1.available() > 0)
     {
       char received = Serial1.read();
       incoming += received;
-      Serial1.println(incoming);
-      if (incoming == "4" || count == 500)
+      if (incoming == "4")
       {
         handshake_flag = 0;
         send_sensor_data = 0;
         incoming = "";
-      }
-      if (incoming == "A") {
+      } else if (incoming == "A") {
         count = 0;
+        incoming = "";
       }
-      count++;
+    }
+    count += 1;
+    if (count > 100) {
+      handshake_flag = 0;
+      send_sensor_data = 0;
+      count = 0;
     }
   }
 }
