@@ -46,7 +46,7 @@ if __name__=="__main__":
                     data_file.write(received_string)
                     # print(received_string)
                     # row = pd.read_csv(io.BytesIO(header+received_string), sep=',' )
-                    row = pd.read_csv(io.BytesIO(header+received_string.rsplit(',', 1)[0]), sep=',' )
+                    row = pd.read_csv(io.BytesIO(header+received_string), sep=',' )
                     # print header+received_string.rsplit(',', 1)[0]
                     df = df.append(row, ignore_index = True)
                     count = count + 1

@@ -1,4 +1,4 @@
-import uart_serial_v3 as uart
+import uart_serial_v3_checksum as uart
 import time
 import threading
 
