@@ -1,8 +1,8 @@
 # plot timeseries data
 
 import os
-from os import listdir
-from os.path import isfile, join, basename
+from os import listdir, makedirs
+from os.path import isfile, join, basename,exists
 # import matplotlib as mpl
 import numpy as np
 import pandas as pd
@@ -47,8 +47,8 @@ L_STEPS = L_FRAME - L_OVLAP
 # data paths
 datapath = 'data_rec'
 data_ex = 'data_ext'
-if not os.path.exists(data_ex):
-    os.makedirs(data_ex)
+if not exists(data_ex):
+    makedirs(data_ex)
 
 if __name__ == "__main__":
 
