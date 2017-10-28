@@ -23,8 +23,8 @@ class Uart_Serial():
             self._collect_thread.start()
 
     def get_prediction(self):
-        if self.self.prediction_flag == True:
-            self.self.prediction_flag = False
+        if self.prediction_flag == True:
+            self.prediction_flag = False
             return self.prediction
         return 12
 
@@ -111,7 +111,7 @@ if __name__=="__main__":
 
             # only predict is both sensors are up
             start_time = time.time()
-            if(sensor_0 = 1 and sensor_1 == 1 ):
+            if(sensor_0 == 1 and sensor_1 == 1 ):
                 print df
                 prediction = dance_moves[predict_knn.predict(df)]
                 print "Prediction!!!!!!!!!", prediction
