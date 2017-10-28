@@ -8,12 +8,12 @@ def verify_checksum(received_string):
     return_string = ""
     for values in result_list[0:len(result_list)-1]:
         total = total + float(values)
-        return_string = return_string + values + " "
-    return_string = return_string.strip() + "\n"
+        return_string = return_string + values + ","
+    return_string = return_string[0:len(return_string)-1] + "\n"
     return total == checksum_value, return_string
 
 def main():
-    ser = serial.Serial('/dev/ttyAMA0', 57600)
+    ser = serial.Serial('/dev/ttyAMA0', 57600, timeout=2.0)
     handshake_flag = 1
     read_sensor_flag = 0
 
