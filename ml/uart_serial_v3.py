@@ -6,6 +6,8 @@ import io
 import threading
 
 dance_moves = ['idle', 'wavehands', 'busdriver', 'frontback', 'jumping', 'jumpingjack', 'turnclap', 'squartturnclap', 'window', 'window360', 'prediction error', 'no detection']
+sensor_0    = 1
+sensor_1    = 1
 
 class Uart_Serial():
     def __init__(self):
@@ -95,13 +97,28 @@ if __name__=="__main__":
                     print(received_string)
                     row = pd.read_csv(io.BytesIO(header+received_string.rsplit(',', 1)[0]), sep=',' )
                     # print header+received_string.rsplit(',', 1)[0]
+                    if(row.ax0 == -1 and row.ay0 == -1 and row.az0 == -1 and row.gx0 == -1 and row.gy0 == -1 and row.gz0 == -1 ):
+                        print "Sensor 0 down, I repeat sensor 0 is down"
+                        sensor_0 = 0
+                    if(row.ax1 == -1 and row.ay1 == -1 and row.az1 == -1 and row.gx1 == -1 and row.gy1 == -1 and row.gz1 == -1 ):
+                        print "Sensor 1 down, I repeat sensor 1 is down"
+                        sensor_1 = 0
+                    # reset sensors
+                    sensor_0 = 1
+                    sensor_1 = 1
                     df = df.append(row, ignore_index = True)
                     count = count + 1
-            print df
-            prediction = dance_moves[predict_knn.predict(df)]
-            print "Prediction!!!!!!!!!", prediction
-            if prediction < 11:
-                self.prediction_flag = True
+
+            # only predict is both sensors are up
+            start_time = time.time()
+            if(sensor_0 = 1 and sensor_1 == 1 ):
+                print df
+                prediction = dance_moves[predict_knn.predict(df)]
+                print "Prediction!!!!!!!!!", prediction
+                if prediction < 11:
+                    self.prediction_flag = True
+            print "My program took", time.time() - start_time, "to predict"
+
 
 
     except KeyboardInterrupt:
