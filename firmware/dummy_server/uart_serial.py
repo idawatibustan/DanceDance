@@ -9,6 +9,7 @@ def verify_checksum(received_string):
     for values in result_list[0:len(result_list)-1]:
         total = total + float(values)
         return_string = return_string + values + " "
+    return_string = return_string.strip() + "\n"
     return total == checksum_value, return_string
 
 def main():
