@@ -27,7 +27,7 @@ def main():
             if (len(received_string)>10):
                 data_file.write(received_string)
                 print(received_string)
-            ser.write("A".encode(encoding='utf_8')) # to acknowledge that the RPi is still receiving
+                ser.write("A".encode(encoding='utf_8')) # to acknowledge that the RPi is still receiving
 
     except KeyboardInterrupt:
         print("\nClosing port /dev/ttyAMA0")
