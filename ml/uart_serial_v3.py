@@ -55,13 +55,24 @@ class Uart_Serial():
                     if self.print_flag:
                         print(received_string)
                     row = pd.read_csv(io.BytesIO(self.header+received_string.rsplit(',', 1)[0]), sep=',' )
+                    if(row.ax0 == -1 and row.ay0 == -1 and row.az0 == -1 and row.gx0 == -1 and row.gy0 == -1 and row.gz0 == -1 ):
+                        print "Sensor 0 down, I repeat sensor 0 is down"
+                        sensor_0 = 0
+                    if(row.ax1 == -1 and row.ay1 == -1 and row.az1 == -1 and row.gx1 == -1 and row.gy1 == -1 and row.gz1 == -1 ):
+                        print "Sensor 1 down, I repeat sensor 1 is down"
+                    sensor_0 = 1
+                    sensor_1 = 1
                     df = df.append(row, ignore_index = True)
                     count = count + 1
-            self.prediction = predict_knn.predict(df)
-            if self.print_flag:
-                print "> > > > > > Prediction", self.prediction
-            if self.prediction < 11:
-                self.prediction_flag = True
+            # only predict is both sensors are up
+            start_time = time.time()
+            if(sensor_0 == 1 and sensor_1 == 1 ):
+                self.prediction = dance_moves[predict_knn.predict(df)]
+                if self.print_flag:
+                    print "> > > > > > Prediction", self.prediction
+                if self.prediction < 11:
+                    self.prediction_flag = True
+            print "My program took", time.time() - start_time, "to predict"
 
     def shutdown(self):
         print("\nClosing port /dev/ttyAMA0")
