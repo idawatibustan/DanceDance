@@ -5,6 +5,8 @@ import predict_knn
 import io
 import threading
 
+dance_moves = ['idle', 'wavehands', 'busdriver', 'frontback', 'jumping', 'jumpingjack', 'turnclap', 'squartturnclap', 'window', 'window360', 'prediction error', 'no detection']
+
 class Uart_Serial():
     def __init__(self):
         self.ser = serial.Serial('/dev/ttyAMA0', 57600)
@@ -24,7 +26,7 @@ class Uart_Serial():
             return self.prediction
         return 12
 
-    def start_reading(self)
+    def start_reading(self):
         print("Initialising handshake sequence")
         while self.handshake_flag:
             self.ser.write("1".encode(encoding='utf_8'))
@@ -92,11 +94,11 @@ if __name__=="__main__":
                     self.data_file.write(received_string)
                     print(received_string)
                     row = pd.read_csv(io.BytesIO(header+received_string.rsplit(',', 1)[0]), sep=',' )
-                    print header+received_string.rsplit(',', 1)[0]
+                    # print header+received_string.rsplit(',', 1)[0]
                     df = df.append(row, ignore_index = True)
                     count = count + 1
             print df
-            prediction = predict_knn.predict(df)
+            prediction = dance_moves[predict_knn.predict(df)]
             print "Prediction!!!!!!!!!", prediction
             if prediction < 11:
                 self.prediction_flag = True
