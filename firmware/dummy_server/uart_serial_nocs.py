@@ -1,16 +1,6 @@
 import serial
 import time
 
-def verify_checksum(received_string):
-    result_list = received_string.split(",")
-    checksum_value = float(result_list[-1])
-    total = 0.0
-    return_string = ""
-    for values in result_list[0:len(result_list)-1]:
-        total = total + float(values)
-        return_string = return_string + values + " "
-    return total == checksum_value, return_string
-
 def main():
     ser = serial.Serial('/dev/ttyAMA0', 57600)
     handshake_flag = 1
@@ -34,14 +24,9 @@ def main():
         data_file.write("ax0,ay0,az0,gx0,gy0,gz0,ax1,ay1,az1,gx1,gy1,gz1\n")
         while read_sensor_flag:
             received_string = ser.readline()
-            is_verified, processed_string = verify_checksum(received_string)
-            print(is_verified)
-            if (is_verified):
-                if (len(processed_string)>10):
-                    data_file.write(processed_string)
-                    print(processed_string)
-            else:
-                print("Data dumped")            
+            if (len(received_string)>10):
+                data_file.write(received_string)
+                print(received_string)
             ser.write("A".encode(encoding='utf_8')) # to acknowledge that the RPi is still receiving
 
     except KeyboardInterrupt:
