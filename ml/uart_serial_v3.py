@@ -10,11 +10,12 @@ sensor_0    = 1
 sensor_1    = 1
 
 class Uart_Serial():
-    def __init__(self):
+    def __init__(self, print_sensor=True):
         self.ser = serial.Serial('/dev/ttyAMA0', 57600)
         self.handshake_flag = 1
         self.read_sensor_flag = 0
         self.prediction_flag = False
+        self.print_flag = print_sensor
         self.prediction = 12
         self.header = "ax0,ay0,az0,gx0,gy0,gz0,ax1,ay1,az1,gx1,gy1,gz1\n"
         self._collect_thread = threading.Thread(target=self.start_reading, args=())
@@ -51,14 +52,14 @@ class Uart_Serial():
                 received_string = self.ser.readline()
                 if (len(received_string)>10):
                     self.data_file.write(received_string)
-                    print(received_string)
+                    if self.print_flag:
+                        print(received_string)
                     row = pd.read_csv(io.BytesIO(self.header+received_string.rsplit(',', 1)[0]), sep=',' )
-                    print self.header+received_string.rsplit(',', 1)[0]
                     df = df.append(row, ignore_index = True)
                     count = count + 1
-            print df
             self.prediction = predict_knn.predict(df)
-            print "Prediction!!!!!!!!!", self.prediction
+            if self.print_flag:
+                print "> > > > > > Prediction", self.prediction
             if self.prediction < 11:
                 self.prediction_flag = True
 
