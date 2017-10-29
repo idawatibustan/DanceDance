@@ -59,7 +59,7 @@ def segment_extract(df):
         df_new = df[ j : j+L_FRAME ]
 
         # extract feature
-        feats = ts.extract_feature( df_new )
+        feats = ts.extract_feature_upgrade( df_new )
 
         if is_clean(feats):
             dataset = dataset.append( feats, ignore_index = True )
@@ -105,8 +105,8 @@ if __name__ == "__main__":
     # save combined dataframe -> df_ext_all
     timestr = time.strftime("%y%m%d%H%M")
     if filtering_on:
-        csvname = "data_filtered_extracted_v1_" + timestr + ".csv"
+        csvname = "data_filtered_extracted_v2_" + timestr + ".csv"
     else:
-        csvname = "data_extracted_v1_" + timestr + ".csv"
+        csvname = "data_extracted_v2_" + timestr + ".csv"
     csv_all = join( data_ex, csvname)
     df_ext_all.to_csv( csv_all, index=False )
