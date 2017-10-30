@@ -7,8 +7,11 @@ const int MPU_addr[N] = {0x68, 0x69}; // I2C address of the first MPU-6050
 
 int handshake_flag;
 int send_sensor_data;
-int count;
 String incoming;
+
+unsigned long now;
+unsigned long then;
+unsigned long TIMEOUT = 5000;
 
 struct Dataframe
 {
@@ -28,7 +31,8 @@ void setup()
   }
   handshake_flag = 0;
   send_sensor_data = 0;
-  count = 0;
+  now = 0;
+  then = 0;
   Serial1.begin(57600);
   Serial.begin(57600);
 }
@@ -44,19 +48,25 @@ void loop()
       if (incoming == "1")
       {
         Serial1.println("2");
-        incoming = "";
       }
       else if (incoming == "3")
       {
         handshake_flag = 1;
         send_sensor_data = 1;
-        incoming = "";
+        then = millis();
       }
+      incoming = "";
     }
   }
   if (send_sensor_data == 1)
   {
-    compileData();
+    now = millis();
+    if (now - then > TIMEOUT) {
+      handshake_flag = 0;
+      send_sensor_data = 0;
+    } else {
+      compileData();
+    }
     while (Serial1.available() > 0)
     {
       char received = Serial1.read();
@@ -65,17 +75,11 @@ void loop()
       {
         handshake_flag = 0;
         send_sensor_data = 0;
-        incoming = "";
-      } else if (incoming == "A") {
-        count = 0;
-        incoming = "";
       }
-    }
-    count += 1;
-    if (count > 100) {
-      handshake_flag = 0;
-      send_sensor_data = 0;
-      count = 0;
+      else if (incoming == "A") {
+        then = millis();
+      }
+      incoming = "";
     }
   }
 }
@@ -102,14 +106,9 @@ void compileData()
 
   char sensor_one[2000];
   // with checksum  
-  sprintf(sensor_one, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1], checksum);
+  sprintf(sensor_one, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%ld\n", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1], checksum);
 
-  Serial1.println(sensor_one);
-  Serial.println(sensor_one);
+  Serial1.print(sensor_one);
   Serial1.flush();
-  Serial.flush();
-//  delay(500);
-//  Serial1.println(sensor_two);
-  //delay(500);
 }
 

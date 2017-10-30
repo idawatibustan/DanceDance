@@ -3,7 +3,7 @@ import time
 
 def verify_checksum(received_string):
     result_list = received_string.split(",")
-    checksum_value = float(result_list[-1])
+    checksum_value = float(result_list[-1].strip())
     total = 0.0
     return_string = ""
     for values in result_list[0:len(result_list)-1]:
@@ -17,7 +17,7 @@ def main():
     handshake_flag = 1
     read_sensor_flag = 0
 
-    try:
+    try: 
         print("Initialising handshake sequence")
         while handshake_flag:
             ser.write("1".encode(encoding='utf_8'))
@@ -41,10 +41,8 @@ def main():
                 if (len(processed_string)>10):
                     data_file.write(processed_string)
                     print(processed_string)
-                    ser.write("A".encode(encoding='utf_8')) # to acknowledge that the RPi is still receiving
-            else:
-                print("Data dumped")            
-                ser.write("A".encode(encoding='utf_8')) # to acknowledge that the RPi is still receiving
+                    ser.write("A".encode(encoding='utf_8'))
+
 
     except KeyboardInterrupt:
         print("\nClosing port /dev/ttyAMA0")
