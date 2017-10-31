@@ -28,13 +28,7 @@ def train_knn(train_set, test_set):
     
     testData  = test_set.drop(droplabels, axis=1).values
     testLabel = test_set.label.values
-    
-    # print("in : %s %s" % (len(train_set), len(test_set)))
-    # print("unique train set", np.unique(train_set.label.values))
-    # print("unique test set", np.unique(test_set.label.values))
-    # print("type: %s %s" % (type(trainData), type(trainLabel)))
-    # print("type: %s %s" % (type(testData), type(testLabel)))
-    
+        
     knnclf = knn(n_neighbors=10 , n_jobs=2 , weights='uniform')
 
     knnModel = knnclf.fit(trainData , trainLabel)
@@ -89,7 +83,6 @@ def plot_all_cnfmats(mats):
                      color="white" if cm[i, j] > thresh else "black")
         ax[col, row].set_xticks(tick_marks, classes)
         ax[col, row].set_yticks(tick_marks, classes)
-    # f.tight_layout()
     plt.show()
 
 def activate_logger(name, filename, append=True):
@@ -112,10 +105,10 @@ if __name__ == "__main__":
     'mean_ax0', 'mean_az0', 'mean_az1', 'mean_abs_ax0', 'mean_abs_gy1',
     'std_ay0', 'std_az0', 'std_ax1', 'std_ay1', 'std_az1', 'std_gy0',
     'std_gx1', 'std_gy1', 'median_ax0', 'mad_ay0', 'mad_az0', 'mad_ay1',
-    'mad_az1', 'mad_gx0', 'mad_gy0', 'mad_gx1', 'mad_gy1', 'max_az0',
-    'max_gx0', 'max_gy0', 'max_gy1', 'min_ay0', 'min_gx1', 'min_gy1',
-    'range_az0', 'range_ay1', 'range_az1', 'range_gx0', 'range_gy0',
-    'range_gx1', 'range_gy1', 'corr_ayz0', 'corr_ay1y0', 'corr_ay1z0',
+    'mad_az1', 'mad_gx0', 'mad_gy0', 'mad_gx1', 'mad_gy1', 'max_gx0',
+    'max_gy0', 'max_gy1', 'min_ay0', 'min_gx1', 'min_gy1', 'range_az0',
+    'range_az1', 'range_gx0', 'range_gy0', 'range_gx1', 'range_gy1',
+    'corr_ayz0',
     'label','dancer','collection']
 
     """GET COLUMNS from V2 exactly as in V1"""
@@ -125,17 +118,19 @@ if __name__ == "__main__":
 
     """ GET ALL COLUMNS """
     df2 = pd.read_csv(TRAINING_FILEPATH+TRAINING_FILE+'.csv')
+    # df2 = df2.loc[df2['dancer'] != EXC_DANCER]
+    # for i in range(6):
+    EXC_DANCER = i + 1
     """ EXCLUDING SOME DANCERS """
     df = df2.loc[df2['dancer'] != EXC_DANCER]
     
     """ REMOVE UNDESIRED COLUMNS """
-    # df = df.drop(droplist, axis=1)
     df = df[feature_list]
     print len(df.columns)
 
     mf = pd.DataFrame()
     count = 0
-    for i in range(2):
+    for i in range(3):
         # kf declare
         kf = KFold( n_splits=5, shuffle=True, random_state=None )
         for train_i, test_i in kf.split(df):
@@ -171,7 +166,7 @@ if __name__ == "__main__":
     pickle.dump(knnModel, open('classifier/'+MODEL_FILE+'.knn','wb'))
     log.info("Selected model %s with conf: %s, %s" % (top.round, top.train_conf, top.test_conf))
 
-    print "Training Completed"
+    print "*** Training Completed ***"
     df = pd.read_csv(TRAINING_FILEPATH+TRAINING_FILE+'.csv')
     df = df[feature_list]
     cnf_mats = []
