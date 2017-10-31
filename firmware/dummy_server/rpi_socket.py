@@ -8,7 +8,7 @@ import sys
 import time
 import random
 
-secret_key = b'this is dance12!'
+secret_key = 'this is dance12!'
 target_ipaddr = sys.argv[1]
 target_port = int(sys.argv[2])
 
@@ -24,7 +24,7 @@ def main():
     try:
         while True:
             data_list = ['random action', random.random(), random.random(), random.random(), random.random()]
-            print("Sending:\n%s" % data_list)
+            print("Sending:\n%s" % data_list) 
             send_data(s, data_list)
     except KeyboardInterrupt:
         send_data(s, ['logout  ', 'END', 'END', 'END', 'END'])
@@ -59,7 +59,8 @@ def send_data(s, data_list):
     data = '#'
     for element in data_list:
         data += str(element) + '|'
-    encoded_data = encrypt_text(bytes(data, 'utf-8'), secret_key)
+    # encoded_data = encrypt_text(bytes(data, 'utf-8'), secret_key)
+    encoded_data = encrypt_text(bytes(data), secret_key)
     
     total_sent = 0
     while total_sent < len(encoded_data): # improve on logic here

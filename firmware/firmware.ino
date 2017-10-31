@@ -159,10 +159,11 @@ void tx_dataframe_to_rpi()
       while (!dataframe_buffer.isEmpty()) {
         //Serial.println("inside dataframe is not empty");
         Dataframe dataframe_tx = dataframe_buffer.shift();
+        long checksum = (long)dataframe.AcX[0] + (long)dataframe.AcY[0] + (long)dataframe.AcZ[0] + (long)dataframe.GyX[0] + (long)dataframe.GyY[0] + (long)dataframe.GyZ[0] +
+    (long)dataframe.AcX[1] + (long)dataframe.AcY[1] + (long)dataframe.AcZ[1] + (long)dataframe.GyX[1] + (long)dataframe.GyY[1] + (long)dataframe.GyZ[1];
         char output[2000];
-        sprintf(output, "%d %d %d %d %d %d %d %d %d %d %d %d",
-                dataframe_tx.AcX1, dataframe_tx.AcY1, dataframe_tx.AcZ1, dataframe_tx.GyX1, dataframe_tx.GyY1, dataframe_tx.GyZ1,
-                dataframe_tx.AcX2, dataframe_tx.AcY2, dataframe_tx.AcZ2, dataframe_tx.GyX2, dataframe_tx.GyY2, dataframe_tx.GyZ2);
+        sprintf(sensor_one, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%ld\n", dataframe.AcX[0], dataframe.AcY[0], dataframe.AcZ[0], dataframe.GyX[0], dataframe.GyY[0], dataframe.GyZ[0], 
+        	dataframe.AcX[1], dataframe.AcY[1], dataframe.AcZ[1], dataframe.GyX[1], dataframe.GyY[1], dataframe.GyZ[1], checksum);
         Serial1.println(output);
         //Serial.println(output);
       }
