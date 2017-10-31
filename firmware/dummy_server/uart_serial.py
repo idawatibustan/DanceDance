@@ -3,11 +3,11 @@ import time
 
 def verify_checksum(received_string):
     result_list = received_string.split(",")
-    checksum_value = float(result_list[-1].strip())
-    total = 0.0
+    checksum_value = int(result_list[-1].strip())
+    total = 0
     return_string = ""
     for values in result_list[0:len(result_list)-1]:
-        total = total + float(values)
+        total = total + int(values)
         return_string = return_string + values + ","
     return_string = return_string[0:len(return_string)-1] + "\n"
     return total == checksum_value, return_string
