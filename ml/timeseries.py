@@ -252,18 +252,38 @@ def extract_feature_upgrade(window):
     # df['range_gz1'] = df['max_gz1'] - df['min_gz1']
 
     # Corr
-    df['corr_axy0'] = np.correlate(window.ax0.values, window.ay0.values)
-    df['corr_axz0'] = np.correlate(window.ax0.values, window.az0.values)
-    df['corr_ayz0'] = np.correlate(window.ay0.values, window.az0.values)
-    df['corr_axy1'] = np.correlate(window.ax1.values, window.ay1.values)
-    df['corr_axz1'] = np.correlate(window.ax1.values, window.az1.values)
-    df['corr_ayz1'] = np.correlate(window.ay1.values, window.az1.values)
+    # df['corr_axy0'] = np.corrcoef(window.ax0.values, window.ay0.values)
+    # df['corr_axz0'] = np.corrcoef(window.ax0.values, window.az0.values)
+    # df['corr_ayz0'] = np.corrcoef(window.ay0.values, window.az0.values)
+    # df['corr_axy1'] = np.corrcoef(window.ax1.values, window.ay1.values)
+    # df['corr_axz1'] = np.corrcoef(window.ax1.values, window.az1.values)
+    # df['corr_ayz1'] = np.corrcoef(window.ay1.values, window.az1.values)
 
-    df['corr_gxy0'] = np.correlate(window.gx0.values, window.gy0.values)
-    # df['corr_gxz0'] = np.correlate(window.gx0.values, window.gz0.values)
-    # df['corr_gyz0'] = np.correlate(window.gy0.values, window.gz0.values)
-    df['corr_gxy1'] = np.correlate(window.gx1.values, window.gy1.values)
-    # df['corr_gxz1'] = np.correlate(window.gx1.values, window.gz1.values)
-    # df['corr_gyz1'] = np.correlate(window.gy1.values, window.gz1.values)
+    # df['corr_gxy0'] = np.corrcoef(window.gx0.values, window.gy0.values)
+    # df['corr_gxy1'] = np.corrcoef(window.gx1.values, window.gy1.values)
+    
+    df['corr_axy0'] = [window['ax0'].corr(window['ay0'])]
+    df['corr_axz0'] = [window['ax0'].corr(window['az0'])]
+    df['corr_ayz0'] = [window['ay0'].corr(window['az0'])]
+    df['corr_axy1'] = [window['ax1'].corr(window['ay1'])]
+    df['corr_axz1'] = [window['ax1'].corr(window['az1'])]
+    df['corr_ayz1'] = [window['ay1'].corr(window['az1'])]
+    df['corr_gxy0'] = [window['gx0'].corr(window['gy0'])]
+    df['corr_gxy1'] = [window['gx1'].corr(window['gy1'])]
 
+    df['corr_ax1x0'] = [window['ax1'].corr(window['ax0'])]
+    df['corr_ax1y0'] = [window['ax1'].corr(window['ay0'])]
+    df['corr_ax1z0'] = [window['ax1'].corr(window['az0'])]
+    df['corr_ay1x0'] = [window['ay1'].corr(window['ax0'])]
+    df['corr_ay1y0'] = [window['ay1'].corr(window['ay0'])]
+    df['corr_ay1z0'] = [window['ay1'].corr(window['az0'])]
+    df['corr_az1x0'] = [window['az1'].corr(window['ax0'])]
+    df['corr_az1y0'] = [window['az1'].corr(window['ay0'])]
+    df['corr_az1z0'] = [window['az1'].corr(window['az0'])]
+
+    df['corr_gx0x1'] = [window['gx0'].corr(window['gx1'])]
+    df['corr_gx0y1'] = [window['gx0'].corr(window['gy1'])]
+    df['corr_gy0x1'] = [window['gy0'].corr(window['gx1'])]
+    df['corr_gy0y1'] = [window['gy0'].corr(window['gy1'])]
+    
     return df
