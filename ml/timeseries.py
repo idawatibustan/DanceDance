@@ -145,6 +145,21 @@ def extract_feature_upgrade(window):
     df['mean_gy1'] = [window.gy1.values.mean()]
     # df['mean_gz1'] = [window.gz1.values.mean()]
 
+    # Mean data
+    df['mean_abs_ax0'] = df['mean_ax0'].abs().values
+    df['mean_abs_ay0'] = df['mean_ay0'].abs().values
+    df['mean_abs_az0'] = df['mean_az0'].abs().values
+    df['mean_abs_ax1'] = df['mean_ax1'].abs().values
+    df['mean_abs_ay1'] = df['mean_ay1'].abs().values
+    df['mean_abs_az1'] = df['mean_az1'].abs().values
+
+    df['mean_abs_gx0'] = df['mean_gx0'].abs().values
+    df['mean_abs_gy0'] = df['mean_gy0'].abs().values
+    # df['mean_abs_gz0'] = df['mean_gz0'].abs().values
+    df['mean_abs_gx1'] = df['mean_gx1'].abs().values
+    df['mean_abs_gy1'] = df['mean_gy1'].abs().values
+    # df['mean_abs_gz1'] = df['mean_gz1'].abs().values
+
     # STD data
     df['std_ax0'] = [window.ax0.values.std()]
     df['std_ay0'] = [window.ay0.values.std()]
@@ -221,20 +236,34 @@ def extract_feature_upgrade(window):
     df['min_gy1'] = [window.gy1.values.min()]
     # df['min_gz1'] = [window.gz1.values.min()]
 
+    # Range
+    df['range_ax0'] = df['max_ax0'].values - df['min_ax0'].values
+    df['range_ay0'] = df['max_ay0'].values - df['min_ay0'].values
+    df['range_az0'] = df['max_az0'].values - df['min_az0'].values
+    df['range_ax1'] = df['max_ax1'].values - df['min_ax1'].values
+    df['range_ay1'] = df['max_ay1'].values - df['min_ay1'].values
+    df['range_az1'] = df['max_az1'].values - df['min_az1'].values
+
+    df['range_gx0'] = df['max_gx0'].values - df['min_gx0'].values
+    df['range_gy0'] = df['max_gy0'].values - df['min_gy0'].values
+    # df['range_gz0'] = df['max_gz0'].values - df['min_gz0'].values
+    df['range_gx1'] = df['max_gx1'].values - df['min_gx1'].values
+    df['range_gy1'] = df['max_gy1'].values - df['min_gy1'].values
+    # df['range_gz1'] = df['max_gz1'].values - df['min_gz1'].values
 
     # Corr
-    df['corr_axy0'] = np.correlate(window.ax0.values, window.ay0.values)
-    df['corr_axz0'] = np.correlate(window.ax0.values, window.az0.values)
-    df['corr_ayz0'] = np.correlate(window.ay0.values, window.az0.values)
-    df['corr_axy1'] = np.correlate(window.ax1.values, window.ay1.values)
-    df['corr_axz1'] = np.correlate(window.ax1.values, window.az1.values)
-    df['corr_ayz1'] = np.correlate(window.ay1.values, window.az1.values)
+    df['corr_axy0'] = np.correlate(window.ax0.values, window.ay0.values)[0]
+    df['corr_axz0'] = np.correlate(window.ax0.values, window.az0.values)[0]
+    df['corr_ayz0'] = np.correlate(window.ay0.values, window.az0.values)[0]
+    df['corr_axy1'] = np.correlate(window.ax1.values, window.ay1.values)[0]
+    df['corr_axz1'] = np.correlate(window.ax1.values, window.az1.values)[0]
+    df['corr_ayz1'] = np.correlate(window.ay1.values, window.az1.values)[0]
 
-    df['corr_gxy0'] = np.correlate(window.gx0.values, window.gy0.values)
-    # df['corr_gxz0'] = np.correlate(window.gx0.values, window.gz0.values)
-    # df['corr_gyz0'] = np.correlate(window.gy0.values, window.gz0.values)
-    df['corr_gxy1'] = np.correlate(window.gx1.values, window.gy1.values)
-    # df['corr_gxz1'] = np.correlate(window.gx1.values, window.gz1.values)
-    # df['corr_gyz1'] = np.correlate(window.gy1.values, window.gz1.values)
+    df['corr_gxy0'] = np.correlate(window.gx0.values, window.gy0.values)[0]
+    # df['corr_gxz0'] = np.correlate(window.gx0.values, window.gz0.values)[0]
+    # df['corr_gyz0'] = np.correlate(window.gy0.values, window.gz0.values)[0]
+    df['corr_gxy1'] = np.correlate(window.gx1.values, window.gy1.values)[0]
+    # df['corr_gxz1'] = np.correlate(window.gx1.values, window.gz1.values)[0]
+    # df['corr_gyz1'] = np.correlate(window.gy1.values, window.gz1.values)[0]
 
     return df
