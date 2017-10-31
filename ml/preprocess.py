@@ -84,7 +84,7 @@ if __name__ == "__main__":
         fnames = f.split(".")[0].split("_")
         # do something to df
         label = fnames[0]
-        collection = fnames[1]
+        collection = fnames[2]
         dancer = fnames[4]
         print "Working on movement: %s by dancer: %s on %s" % (label, dancer, collection)
 
