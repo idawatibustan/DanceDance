@@ -13,6 +13,10 @@ static int16_t AcX[N], AcY[N], AcZ[N], Tmp[N], GyX[N], GyY[N], GyZ[N];
 static int handshake_flag = 0;
 static int send_sensor_data = 0;
 
+unsigned long now;
+unsigned long then;
+const unsigned long TIMEOUT;
+
 struct Dataframe {
   int16_t AcX1, AcY1, AcZ1, Tmp1, GyX1, GyY1, GyZ1, AcX2, AcY2, AcZ2, Tmp2, GyX2, GyY2, GyZ2;
 } dataframe;
@@ -192,19 +196,28 @@ void comms_task(void * pvParameters) {
 //          Serial.print("RECEIVED A 3 SETTING FLAGS! handshake: ");
           handshake_flag = 1;
           send_sensor_data = 1;
+          then = millis();
 //          Serial.print(handshake_flag);
 //          Serial.print("  send_sensor_data: "); Serial.println(send_sensor_data);
         }
       }
     }
     if (send_sensor_data == 1) {
-      tx_dataframe_to_rpi();
+      now = millis();
+      if (now - then > TIMEOUT) {
+        handshake_flag = 0;
+        send_sensor_data = 0;
+      } else {
+        tx_dataframe_to_rpi();
+      }
       while (Serial1.available() > 0) {
       	char inc = Serial1.read();
       	if (inc == '4') {
       		handshake_flag = 0;
       		send_sensor_data = 0;
-      	}
+      	} else if (inc == 'A') {
+          then = millis();
+        }
       }
     }
 
