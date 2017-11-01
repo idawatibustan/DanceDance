@@ -13,6 +13,8 @@ import itertools
 TRAINING_V1_FILE="data_extracted_v1_1710291648"
 TRAINING_FILE="data_extracted_v2_1710312018"
 TRAINING_FILEPATH='dataset/data_ext/'
+TESTING_FILE="data_test_extracted_v2_1711010205"
+TESTING_FILEPATH='dataset/data_ext_test/'
 MODEL_FILE="dance_top5_v2-3"
 EXC_DANCER = 2
 
@@ -29,7 +31,7 @@ def train_knn(train_set, test_set):
     testData  = test_set.drop(droplabels, axis=1).values
     testLabel = test_set.label.values
         
-    knnclf = knn(n_neighbors=10 , n_jobs=2 , weights='uniform')
+    knnclf = knn(n_neighbors=5 , algorithm='kd_tree' , leaf_size=25 , n_jobs=2 , weights='distance')
 
     knnModel = knnclf.fit(trainData , trainLabel)
 
@@ -66,7 +68,7 @@ def plot_all_cnfmats(mats):
     leng = len(mats)
     cols = 3
     rows = (leng-1)/cols + 1
-    f, ax = plt.subplots(rows, cols, figsize=(16,30))
+    f, ax = plt.subplots(rows, cols, figsize=(12,8))
     classes = range(0,11)
     tick_marks = np.arange(len(classes))
     for j in range(leng):
@@ -83,6 +85,44 @@ def plot_all_cnfmats(mats):
                      color="white" if cm[i, j] > thresh else "black")
         ax[col, row].set_xticks(tick_marks, classes)
         ax[col, row].set_yticks(tick_marks, classes)
+        ax[col, row].set_ylabel('True label')
+        ax[col, row].set_xlabel('Predicted label')
+    f.tight_layout()
+    plt.show()
+
+def plot_cnfmats(cm):
+    classes = range(11)
+    tick_marks = np.arange(len(classes))
+
+    f, (ax1, ax2) = plt.subplots(1,2, figsize=(8,4))
+    ax1.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    ax1.set_title("confusion_matrix")
+    fmt = 'd'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        ax1.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+    ax1.set_xticks(tick_marks, classes)
+    ax1.set_yticks(tick_marks, classes)
+    ax1.set_ylabel('True label')
+    ax1.set_xlabel('Predicted label')
+
+    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    ax2.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    ax2.set_title("normalized_confusion_matrix")
+    fmt = '.2f'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        ax2.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+    ax2.set_xticks(tick_marks, classes)
+    ax2.set_yticks(tick_marks, classes)
+    ax2.set_ylabel('True label')
+    ax2.set_xlabel('Predicted label')
+
+    f.tight_layout()
     plt.show()
 
 def activate_logger(name, filename, append=True):
@@ -109,6 +149,29 @@ if __name__ == "__main__":
     'max_gy1', 'min_ay0', 'min_gx1', 'min_gy1', 'range_az0',
     'range_az1', 'range_gx0', 'range_gy0', 'range_gx1', 'range_gy1',
     'corr_ayz0',
+    'label','dancer','collection']
+
+    feature_list1 = [
+    'mean_ax0', 'mean_az0', 'mean_az1', 'mean_gy1', 'mean_abs_ax0',
+    'mean_abs_ay0', 'mean_abs_gy1', 'std_ay0', 'std_az0', 'std_ax1',
+    'std_ay1', 'std_az1', 'std_gy0', 'std_gx1', 'std_gy1', 'median_ax0',
+    'mad_ax0', 'mad_ax1', 'mad_ay1', 'mad_az1', 'mad_gy0', 'mad_gy1',
+    'max_ax0', 'max_ay0', 'max_az0', 'max_gx0', 'max_gy0', 'max_gx1',
+    'max_gy1', 'min_ay0', 'min_az1', 'min_gx0', 'min_gx1', 'min_gy1',
+    'range_ay0', 'range_az0', 'range_ax1', 'range_ay1', 'range_gx0',
+    'range_gy0', 'range_gx1', 'corr_ayz0', 'corr_gxy0',
+    'label','dancer','collection']
+
+    feature_list2 = [
+    'mean_ax0', 'mean_az0', 'mean_az1', 'mean_gy1', 'mean_abs_ax0',
+    'mean_abs_gy1', 'std_ax0', 'std_ay0', 'std_az0', 'std_ay1',
+    'std_az1', 'std_gy0', 'std_gx1', 'std_gy1', 'median_az0',
+    'median_az1', 'mad_ax0', 'mad_ay0', 'mad_az0', 'mad_ax1', 'mad_ay1',
+    'mad_az1', 'mad_gx0', 'mad_gy0', 'mad_gx1', 'mad_gy1', 'max_az0',
+    'max_az1', 'max_gy0', 'max_gy1', 'min_ay0', 'min_ax1', 'min_gx0',
+    'min_gx1', 'min_gy1', 'range_ay0', 'range_az0', 'range_az1',
+    'range_gx0', 'range_gy0', 'range_gx1', 'range_gy1', 'corr_ax1x0',
+    'corr_ay1z0',
     'label','dancer','collection']
 
     """GET COLUMNS from V2 exactly as in V1"""
@@ -173,6 +236,12 @@ if __name__ == "__main__":
     for i in range(1,7):
         print "Testing on excluded dancer:", i
         df1 = df.loc[df['dancer'] == i]
-        mats = test_classifier(knnModel, df1)
-        cnf_mats.append(mats)
+        cm = test_classifier(knnModel, df1)
+        cnf_mats.append(cm)
     plot_all_cnfmats(cnf_mats)
+
+    df = pd.read_csv(TESTING_FILEPATH+TESTING_FILE+'.csv')
+    df = df[feature_list]
+    print "Testing on unseen dancer"
+    cm = test_classifier(knnModel, df)
+    plot_cnfmats(cm)
