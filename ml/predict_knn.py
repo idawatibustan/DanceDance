@@ -10,7 +10,7 @@ from sklearn.metrics import confusion_matrix
 
 # csvfile = 'test.csv'
 # df = pd.read_csv(csvfile)
-loaded_knn = pickle.load(open('classifier/activities_kf.knn','rb'))
+loaded_knn = pickle.load(open('classifier/dance_top5_v3.knn','rb'))
 
 def is_clean(df_):
     if np.any(pd.isnull(df_)):
@@ -19,7 +19,10 @@ def is_clean(df_):
 
 def process_data(window):
     # Do low pass filter here
-    feats = ts.extract_feature( window )
+    # feats = ts.extract_feature( window )
+    # feats = ts.extract_feature_upgrade( window )
+    # feats = ts.extract_feature_v2( window )
+    feats = ts.extract_feature_v3( window )
     if not is_clean(feats):
         raise ValueError("NaN data found, window can't be processed")
     return feats
