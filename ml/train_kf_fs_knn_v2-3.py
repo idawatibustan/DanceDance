@@ -15,7 +15,7 @@ TRAINING_FILE="data_extracted_v2_1710312018"
 TRAINING_FILEPATH='dataset/data_ext/'
 TESTING_FILE="data_test_extracted_v2_1711010205"
 TESTING_FILEPATH='dataset/data_ext_test/'
-MODEL_FILE="dance_top5_v2-3"
+MODEL_FILE="dance_v2-3"
 EXC_DANCER = 2
 
 if not exists('log'):
