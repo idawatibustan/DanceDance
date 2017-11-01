@@ -38,7 +38,7 @@ def plot_acc(df, label=None):
         
 def plot_sensor(df, label=None):
     sensors = [['gx0','gy0','gz0'],['gx1','gy1','gz1'],['ax0','ay0','az0'],['ax1','ay1','az1']]
-    f, ax = plt.subplots( 2, 2, figsize=(16,5), sharey=True, sharex=True)
+    f, ax = plt.subplots( 2, 2, figsize=(20,10), sharey=True, sharex=True)
     for i in range(4):
         if label:
             plt.title("%s - acc %s" % (label, sensors[i]))
