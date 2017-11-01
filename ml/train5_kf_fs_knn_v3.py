@@ -10,7 +10,6 @@ import numpy as np
 import pickle
 import itertools
 
-TRAINING_V1_FILE="data_extracted_v1_1710291648"
 TRAINING_FILE="data_extracted_v3_1711011902"
 TRAINING_FILEPATH='dataset/data_ext/'
 TESTING_FILE="data_test_extracted_v3_1711011842"
@@ -37,8 +36,6 @@ def train_knn(train_set, test_set):
 
     train_conf = knnModel.score( trainData , trainLabel )
     test_conf = knnModel.score( testData  , testLabel )
-    # print("Training set score for KNN: %f" % train_conf )
-    # print("Testing  set score for KNN: %f" % test_conf )
 
     y_pred = knnModel.predict(testData)
 
@@ -61,11 +58,9 @@ def test_classifier(knn, df):
     print("Testing set score for KNN: %f" % knn.score(testData , testLabel ))
     y_pred = knn.predict(testData)
     cnf_matrix = confusion_matrix(testLabel, y_pred)
-    # np.set_printoptions(precision=2)
     return cnf_matrix
 
 def plot_all_cnfmats(mats):
-    # classes = range(0,11)
     classes = range(6)
     leng = len(mats)
     cols = 3
@@ -89,7 +84,7 @@ def plot_all_cnfmats(mats):
         ax[col, row].set_ylabel('True label')
         ax[col, row].set_xlabel('Predicted label')
     f.tight_layout()
-    plt.show()
+    # plt.show()
 
 def plot_cnfmats(cm):
     classes = range(6)
@@ -124,7 +119,7 @@ def plot_cnfmats(cm):
     ax2.set_xlabel('Predicted label')
 
     f.tight_layout()
-    plt.show()
+    # plt.show()
 
 def activate_logger(name, filename, append=True):
     import logging
@@ -142,32 +137,6 @@ def activate_logger(name, filename, append=True):
 if __name__ == "__main__":
     # activate logger
     log = activate_logger('train_kf', 'log/'+MODEL_FILE+'.log', append=False)
-    feature_list = [
-    'mean_ax0', 'mean_az0', 'mean_az1', 'mean_abs_ax0', 'mean_abs_gy1',
-    'std_ay0', 'std_az0', 'std_ax1', 'std_ay1', 'std_az1', 'std_gy0',
-    'std_gx1', 'std_gy1', 'median_ax0', 'mad_ay0', 'mad_az0', 'mad_ay1',
-    'mad_az1', 'mad_gy0', 'mad_gx1', 'mad_gy1', 'max_gx0', 'max_gy0',
-    'max_gy1', 'min_ay0', 'min_gx1', 'min_gy1', 'range_az0',
-    'range_az1', 'range_gx0', 'range_gy0', 'range_gx1', 'range_gy1',
-    'corr_ayz0',
-    'label','dancer','collection']
-
-    feature_list = [
-    'mean_ax0', 'mean_ay0', 'mean_az0', 'mean_ax1', 'mean_az1',
-    'mean_gy1', 'mean_abs_ax0', 'mean_abs_ay0', 'mean_abs_az0',
-    'mean_abs_ax1', 'mean_abs_gy1', 'std_ax0', 'std_ay0', 'std_az0',
-    'std_ax1', 'std_ay1', 'std_az1', 'std_gx0', 'std_gy0', 'std_gx1',
-    'std_gy1', 'median_ax0', 'median_az0', 'median_ax1', 'median_az1',
-    'median_gy1', 'mad_ay0', 'mad_az0', 'mad_ax1', 'mad_ay1', 'mad_az1',
-    'mad_gx0', 'mad_gy0', 'mad_gx1', 'mad_gy1', 'max_ax0', 'max_ay0',
-    'max_az0', 'max_ax1', 'max_ay1', 'max_az1', 'max_gy0', 'max_gx1',
-    'max_gy1', 'min_ay0', 'min_az0', 'min_ax1', 'min_az1', 'min_gx0',
-    'min_gy0', 'min_gx1', 'min_gy1', 'range_ax0', 'range_ay0',
-    'range_az0', 'range_ax1', 'range_ay1', 'range_az1', 'range_gx0',
-    'range_gy0', 'range_gx1', 'range_gy1', 'corr_ayz0', 'corr_axz1',
-    'corr_gxy0', 'corr_ax1x0', 'corr_ax1y0', 'corr_ay1x0', 'corr_ay1y0',
-    'corr_ay1z0', 'corr_az1x0', 'corr_az1y0', 'corr_gx0x1',
-    'label','dancer','collection']
 
     """ FEATURES FOR MOVES 1 - 5 """
     feature_list = [
@@ -184,28 +153,19 @@ if __name__ == "__main__":
     'corr_ay1y0', 'corr_ay1z0', 'corr_gy0y1',
     'label','dancer','collection']
 
-    """GET COLUMNS from V2 exactly as in V1"""
-    # df1_cols = pd.read_csv(TRAINING_FILEPATH+TRAINING_V1_FILE+'.csv', nrows=1).columns
-    # load processed data
-    # df2 = pd.read_csv(TRAINING_FILEPATH+TRAINING_FILE+'.csv', usecols=df1_cols)
-
     """ GET ALL COLUMNS """
     df2 = pd.read_csv(TRAINING_FILEPATH+TRAINING_FILE+'.csv')
-    # df2 = df2.loc[df2['dancer'] != EXC_DANCER]
-    # for i in range(6):
-    # EXC_DANCER = i + 1
 
     """ EXCLUDING SOME DANCERS """
     # df = df2.loc[df2['dancer'] != EXC_DANCER]
 
     """ EXCLUDING SOME LABELS """
     df = df2.loc[df2['label'] < 6]
-    
     # df = df2
 
     """ REMOVE UNDESIRED COLUMNS """
     df = df[feature_list]
-    print len(df.columns)
+    print("Number of features", len(df.columns))
 
     mf = pd.DataFrame()
     count = 0
@@ -236,7 +196,7 @@ if __name__ == "__main__":
     # sort_by max test_conf and train_conf
     mf = mf.sort_values('train_conf', ascending=False).reset_index(drop=True)
     mf = mf.sort_values('test_conf', ascending=False).reset_index(drop=True)
-    print mf
+    print(mf)
     log.info("model_table\n %s" % mf)
     
     # get model with max confidence, store
@@ -245,14 +205,14 @@ if __name__ == "__main__":
     pickle.dump(knnModel, open('classifier/'+MODEL_FILE+'.knn','wb'))
     log.info("Selected model %s with conf: %s, %s" % (top.round, top.train_conf, top.test_conf))
 
-    print "*** Training Completed ***"
+    print("*** Training Completed ***")
     df = pd.read_csv(TRAINING_FILEPATH+TRAINING_FILE+'.csv')
     df = df[feature_list]
     """EXCLUDE DANCE MOVES"""
     df = df.loc[df['label'] < 6]
     cnf_mats = []
     for i in range(1,7):
-        print "Testing on excluded dancer:", i
+        print("Testing on excluded dancer:", i)
         df1 = df.loc[df['dancer'] == i]
         cm = test_classifier(knnModel, df1)
         cnf_mats.append(cm)
@@ -260,6 +220,6 @@ if __name__ == "__main__":
 
     df = pd.read_csv(TESTING_FILEPATH+TESTING_FILE+'.csv')
     df = df[feature_list]
-    print "Testing on unseen dancer"
+    print("Testing on unseen dancer")
     cm = test_classifier(knnModel, df)
     plot_cnfmats(cm)
