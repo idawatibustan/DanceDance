@@ -105,8 +105,8 @@ if __name__ == "__main__":
     'mean_ax0', 'mean_az0', 'mean_az1', 'mean_abs_ax0', 'mean_abs_gy1',
     'std_ay0', 'std_az0', 'std_ax1', 'std_ay1', 'std_az1', 'std_gy0',
     'std_gx1', 'std_gy1', 'median_ax0', 'mad_ay0', 'mad_az0', 'mad_ay1',
-    'mad_az1', 'mad_gx0', 'mad_gy0', 'mad_gx1', 'mad_gy1', 'max_gx0',
-    'max_gy0', 'max_gy1', 'min_ay0', 'min_gx1', 'min_gy1', 'range_az0',
+    'mad_az1', 'mad_gy0', 'mad_gx1', 'mad_gy1', 'max_gx0', 'max_gy0',
+    'max_gy1', 'min_ay0', 'min_gx1', 'min_gy1', 'range_az0',
     'range_az1', 'range_gx0', 'range_gy0', 'range_gx1', 'range_gy1',
     'corr_ayz0',
     'label','dancer','collection']
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     df2 = pd.read_csv(TRAINING_FILEPATH+TRAINING_FILE+'.csv')
     # df2 = df2.loc[df2['dancer'] != EXC_DANCER]
     # for i in range(6):
-    EXC_DANCER = i + 1
+    # EXC_DANCER = i + 1
     """ EXCLUDING SOME DANCERS """
     df = df2.loc[df2['dancer'] != EXC_DANCER]
     
