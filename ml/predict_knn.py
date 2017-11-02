@@ -19,7 +19,7 @@ MILESTONE = 1
 if MILESTONE == 1:
     loaded_knn = pickle.load(open('classifier/dance_top5_v3.knn','rb'))
 elif MILESTONE == 2:
-    loaded_knn = pickle.load(open('classifier/dance_v3.knn','rb'))
+    loaded_knn = pickle.load(open('classifier/dance_v2-3.knn','rb'))
 
 def is_clean(df_):
     if np.any(pd.isnull(df_)):
