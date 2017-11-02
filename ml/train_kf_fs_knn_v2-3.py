@@ -12,9 +12,9 @@ import itertools
 
 TRAINING_V1_FILE="data_extracted_v1_1710291648"
 TRAINING_FILE="data_extracted_v2_1710312018"
-TRAINING_FILEPATH='dataset/data_ext/'
+TRAINING_FILEPATH='data_ext/'
 TESTING_FILE="data_test_extracted_v2_1711010205"
-TESTING_FILEPATH='dataset/data_ext_test/'
+TESTING_FILEPATH='data_ext_test/'
 MODEL_FILE="dance_v2-3"
 EXC_DANCER = 2
 
@@ -88,7 +88,7 @@ def plot_all_cnfmats(mats):
         ax[col, row].set_ylabel('True label')
         ax[col, row].set_xlabel('Predicted label')
     f.tight_layout()
-    plt.show()
+    # plt.show()
 
 def plot_cnfmats(cm):
     classes = range(11)
@@ -123,7 +123,7 @@ def plot_cnfmats(cm):
     ax2.set_xlabel('Predicted label')
 
     f.tight_layout()
-    plt.show()
+    # plt.show()
 
 def activate_logger(name, filename, append=True):
     import logging
@@ -185,8 +185,8 @@ if __name__ == "__main__":
     # for i in range(6):
     # EXC_DANCER = i + 1
     """ EXCLUDING SOME DANCERS """
-    df = df2.loc[df2['dancer'] != EXC_DANCER]
-    
+    # df = df2.loc[df2['dancer'] != EXC_DANCER]
+    df = df2
     """ REMOVE UNDESIRED COLUMNS """
     df = df[feature_list]
     print len(df.columns)

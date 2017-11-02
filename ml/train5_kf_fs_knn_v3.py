@@ -11,9 +11,9 @@ import pickle
 import itertools
 
 TRAINING_FILE="data_extracted_v3_1711011902"
-TRAINING_FILEPATH='dataset/data_ext/'
+TRAINING_FILEPATH='data_ext/'
 TESTING_FILE="data_test_extracted_v3_1711011842"
-TESTING_FILEPATH='dataset/data_ext_test/'
+TESTING_FILEPATH='data_ext_test/'
 MODEL_FILE="dance_top5_v3"
 EXC_DANCER = 2
 
