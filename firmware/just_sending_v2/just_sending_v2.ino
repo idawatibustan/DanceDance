@@ -111,7 +111,15 @@ void compileData()
     dataframe.Tmp[i] = round((Wire.read() << 8 | Wire.read()) / 340.00 + 36.53); // 0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
     dataframe.GyX[i] = Wire.read() << 8 | Wire.read();                           // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
     dataframe.GyY[i] = Wire.read() << 8 | Wire.read();                           // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
-    dataframe.GyZ[i] = Wire.read() << 8 | Wire.read();                           // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
+    dataframe.GyZ[i] = Wire.read() << 8 | Wire.read();
+    if (((AcX[i] == 0)&&(AcY[i] == 0)&&(AcZ[i] == 0))||((AcX[i] == -1)&&(AcY[i] == -1)&&(AcZ[i] == -1))){
+      Wire.end();
+      Wire.begin();
+      Wire.beginTransmission(MPU_addr[i]);
+      Wire.write(0x6B);  // PWR_MGMT_1 register
+      Wire.write(0);     // set to zero (wakes up the MPU-6050)
+      Wire.endTransmission(true);
+    }                         // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
   }
 
   // Read a value from the INA169 board
