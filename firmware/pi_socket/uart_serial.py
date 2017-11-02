@@ -1,7 +1,7 @@
 import serial
 import time
 import pandas as pd
-import predict_knn_v2 as predict_knn
+import predict_knn
 import io
 import threading
 
@@ -27,9 +27,8 @@ def verify_checksum(received_string):
     return total == checksum_value, return_string
 
 def extract(processed_string):
-    processed_list = processed_string.split(",")
-    voltage = float( processed_list[-2].strip() )
-    current = float( processed_list[-1].strip() )
+    voltage = 4.8
+    current = 0.002
     power = voltage * current
     return voltage, current, power
 
@@ -89,7 +88,7 @@ class Uart_Serial():
                 # print "cv", cv
                 if cv == True:
                     self.ser.write("A".encode(encoding="utf_8"))
-                    row = pd.read_csv(io.BytesIO(self.header+rs.rsplit(',', 3)[0]), sep=',' )
+                    row = pd.read_csv(io.BytesIO(self.header+rs.rsplit(',', 1)[0]), sep=',' )
                     df = df.append(row, ignore_index = True)
                     self.voltage, self.current, self.power = extract(rs)
                     self.cumpower = self.cumpower + self.power
