@@ -1,7 +1,7 @@
 import serial
 import time
 import pandas as pd
-import predict_knn_v2 as predict_knn
+import predict_knn
 import io
 import threading
 
