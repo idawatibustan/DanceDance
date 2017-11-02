@@ -10,9 +10,6 @@ SemaphoreHandle_t buffer_semaphore = NULL;
 const int MPU_1_address = 0x68;
 const int MPU_2_address = 0x69;
 const int N  = 2;
-
-//compatability 
-const int MPU_addr[N] = {0x68, 0x69}; // I2C address of the first MPU-6050
 static int16_t AcX[N], AcY[N], AcZ[N], Tmp[N], GyX[N], GyY[N], GyZ[N];
 
 static int handshake_flag = 0;
@@ -21,19 +18,6 @@ static int send_sensor_data = 0;
 unsigned long now;
 unsigned long then;
 const unsigned long TIMEOUT = 5000;
-
-const int VOLT_PIN = A0;    // VD output
-const int CURR_PIN = A1;    // INA169 output
-const int led = 12;         // test LED
-const float RS = 10;        // Shunt resistor value (in ohms)
-const int VOLTAGE_REF = 5;  // Reference voltage for analog read
-
-// Global Variables
-float voltSensorValue;   // Variable to store value from analog read VD
-float currSensorValue;   // Variable to store value from analog read INA
-float current;       // Calculated current value
-float voltage;       // Calculated voltage value
-
 
 struct Dataframe {
   int16_t AcX1, AcY1, AcZ1, Tmp1, GyX1, GyY1, GyZ1, AcX2, AcY2, AcZ2, Tmp2, GyX2, GyY2, GyZ2;
@@ -129,16 +113,6 @@ void pollMPU(int i) {
     GyY[i]=Wire.read()<<8|Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
     GyZ[i]=Wire.read()<<8|Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
 
-    //wake if died
-    if (((AcX[i] == 0)&&(AcY[i] == 0)&&(AcZ[i] == 0))||((AcX[i] == -1)&&(AcY[i] == -1)&&(AcZ[i] == -1))){
-      Wire.end();
-      Wire.begin();
-      Wire.beginTransmission(MPU_addr[i]);
-      Wire.write(0x6B);  // PWR_MGMT_1 register
-      Wire.write(0);     // set to zero (wakes up the MPU-6050)
-      Wire.endTransmission(true);
-    }    
-
 // fake data for when testing with only arduino
 //  AcX[i] = 1 * i; // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
 //  AcY[i] = 2 * i; // 0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
@@ -203,39 +177,11 @@ void tx_dataframe_to_rpi()
           break;
         } 
         Dataframe dataframe_tx = dataframe_buffer.shift();
-
-        // implemented here for without buffer because poll->send together
-        // Read a value from the INA169 board
-        voltSensorValue = analogRead(VOLT_PIN);
-        currSensorValue = analogRead(CURR_PIN);
-
-        // Remap the ADC value into a voltage number (5V reference)
-        voltSensorValue = (voltSensorValue * VOLTAGE_REF) / 1023;
-        currSensorValue = (currSensorValue * VOLTAGE_REF) / 1023;
-
-        // Follow the equation given by the INA169 datasheet to
-        // determine the current flowing through RS. Assume RL = 10k
-        // Is = (Vout x 1k) / (RS x RL)
-        current = currSensorValue / (10 * RS);
-
-        int currVoltSum = current + (voltSensorValue * 2);
-
-
-
-
-        long checksum = (long)dataframe.AcX1 + (long)dataframe.AcY1 + (long)dataframe.AcZ1 + (long)dataframe.GyX1 + (long)dataframe.GyY1 + (long)dataframe.GyZ1 +
-    (long)dataframe.AcX2 + (long)dataframe.AcY2 + (long)dataframe.AcZ2 + (long)dataframe.GyX2 + (long)dataframe.GyY2 + (long)dataframe.GyZ2 + (long) currVoltSum;
-
-
-        byte precision = 5;
-        char voltageFloatBuffer[20];
-        char currFloatBuffer[20];
-        dtostrf(voltSensorValue*2, precision, precision-2, voltageFloatBuffer);
-        dtostrf(current, precision, precision, currFloatBuffer);
-
+        long checksum = (long)dataframe_tx.AcX1 + (long)dataframe_tx.AcY1 + (long)dataframe_tx.AcZ1 + (long)dataframe_tx.GyX1 + (long)dataframe_tx.GyY1 + (long)dataframe_tx.GyZ1 +
+    (long)dataframe_tx.AcX2 + (long)dataframe_tx.AcY2 + (long)dataframe_tx.AcZ2 + (long)dataframe_tx.GyX2 + (long)dataframe_tx.GyY2 + (long)dataframe_tx.GyZ2;
         char output[1000];
-        sprintf(output, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%s,%ld\n", dataframe.AcX1, dataframe.AcY1, dataframe.AcZ1, dataframe.GyX1, dataframe.GyY1, dataframe.GyZ1, 
-          dataframe.AcX2, dataframe.AcY2, dataframe.AcZ2, dataframe.GyX2, dataframe.GyY2, dataframe.GyZ2, voltageFloatBuffer , currFloatBuffer , checksum);
+        sprintf(output, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%ld\n", dataframe_tx.AcX1, dataframe_tx.AcY1, dataframe_tx.AcZ1, dataframe_tx.GyX1, dataframe_tx.GyY1, dataframe_tx.GyZ1, 
+          dataframe_tx.AcX2, dataframe_tx.AcY2, dataframe_tx.AcZ2, dataframe_tx.GyX2, dataframe_tx.GyY2, dataframe_tx.GyZ2, checksum);
         Serial1.print(output);
         
         Serial.println(output);
@@ -296,6 +242,5 @@ void loop() {
 
 
 }
-
 
 
