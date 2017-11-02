@@ -57,14 +57,12 @@ def main():
             is_verified, processed_string = verify_checksum(received_string)
             voltage, current, power, data_string = extract(processed_string)
             cumpower = cumpower + float(power)
-            processed_string = processed_string.strip() + "," + voltage + "," + current + "," + power + "," + str(cumpower) + "\n"
-            print(is_verified)
-            print(received_string)
+            processed_string = processed_string.strip() + "," + power + "," + str(cumpower) + "\n"
             print(processed_string)
+            print(data_string)
             if (is_verified):
                 if (len(processed_string)>10):
                     data_file.write(data_string)
-                    print(processed_string)
                     ser.write("A".encode(encoding='utf_8'))
 
 
