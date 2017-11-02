@@ -59,8 +59,8 @@ class Uart_Serial():
         return 12
 
     def get_info(self):
-        v = "%.3f" % self.voltage
-        c = "%.3f" % self.current
+        v = "%.5f" % self.voltage
+        c = "%.5f" % self.current
         p = "%.3f" % self.power
         cp = "%.3f" % self.cumpower
         return v, c, p, cp
