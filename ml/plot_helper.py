@@ -25,8 +25,8 @@ def plot_gyro(df, label=None):
         plt.show()
         
 def plot_acc(df, label=None):
-    gyros = [['ax0','ay0','az0'],['ax1','ay1','az1']]
-    for num in gyros:
+    accs = [['ax0','ay0','az0'],['ax1','ay1','az1']]
+    for num in accs:
         plt.figure(figsize=(16,3))
         if label:
             plt.title("%s - acc %s" % (label, num))
@@ -36,6 +36,19 @@ def plot_acc(df, label=None):
             plt.plot(df.index, df[col])
         plt.show()
         
+def plot_sensor(df, label=None):
+    sensors = [['gx0','gy0','gz0'],['gx1','gy1','gz1'],['ax0','ay0','az0'],['ax1','ay1','az1']]
+    f, ax = plt.subplots( 2, 2, figsize=(20,10), sharey=True, sharex=True)
+    for i in range(4):
+        if label:
+            plt.title("%s - acc %s" % (label, sensors[i]))
+        else:
+            plt.title("acc %s" % sensors[i])
+        for col in sensors[i]:
+            ax[i/2, i%2].plot(df.index, df[col])
+            ax[i/2, i%2].set_title( str(sensors[i]) )
+    plt.show()
+
 def plot_filter(t, old, new):
     plt.figure(figsize=(16,3))
     plt.plot(t, old, 'b-', label='data')

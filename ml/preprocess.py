@@ -1,5 +1,4 @@
 # plot timeseries data
-
 import os
 from os import listdir, makedirs
 from os.path import isfile, join, basename,exists
@@ -7,6 +6,7 @@ from os.path import isfile, join, basename,exists
 import numpy as np
 import pandas as pd
 import timeseries as ts
+import time
 from low_pass_filter import butter_lowpass_filter
 from plot_helper import plot_frame, plot_gyro, plot_acc, plot_filter
 
@@ -38,19 +38,36 @@ def is_clean(df):
     return True
 
 # segment param
-FREQ = 60
-T_LEN = 2.4
-L_FRAME = int( FREQ * T_LEN )
-L_OVLAP = int( 0.5 * L_FRAME )
+FREQ = 60                       # Hz
+T_LEN = 2.4                     # seconds
+L_FRAME = int( FREQ * T_LEN )   # window size
+L_OVLAP = int( 0.5 * L_FRAME )  # overlap size
 L_STEPS = L_FRAME - L_OVLAP
 
 # data paths
-datapath = 'data_rec'
-data_ex = 'data_ext'
+datapath = 'dataset/data_rec'
+data_ex = 'dataset/data_ext'
 if not exists(data_ex):
     makedirs(data_ex)
 
+def segment_extract(df):
+    # splitting up lines & perform extraction
+    max_len = len(df.index)
+    dataset = pd.DataFrame()
+    for j in np.arange(0, max_len, L_STEPS):
+        # get segment
+        df_new = df[ j : j+L_FRAME ]
+
+        # extract feature
+        feats = ts.extract_feature( df_new )
+
+        if is_clean(feats):
+            dataset = dataset.append( feats, ignore_index = True )
+
+    return dataset
+
 if __name__ == "__main__":
+    filtering_on = False        # set before running
 
     # load data
     csvfiles = [ f for f in listdir(datapath) if isfile(join(datapath, f)) and '.csv' in f ]
@@ -59,41 +76,37 @@ if __name__ == "__main__":
     # iterate through all files
     # load it to df
     for f in csvfiles:
-        dataset = pd.DataFrame()
 
         # load file
         csvfile = join(datapath,f)
         df = pd.read_csv(csvfile)
 
+        fnames = f.split(".")[0].split("_")
         # do something to df
-        label = f.split("_")[0]
-        print label
+        label = fnames[0]
+        collection = fnames[2]
+        dancer = fnames[4]
+        print "Working on movement: %s by dancer: %s on %s" % (label, dancer, collection)
 
-        # splitting up lines & perform extraction
-        max_len = len(df.index)
-        for j in np.arange(0, max_len, L_STEPS):
-            # get & plot segment
-            df_new = df[ j : j+L_FRAME ]
-#            plot_gyro(df_new)
-#            plot_acc(df_new)
-#            df_filtered = low_pass(df_new)
-#            plot_gyro(df_filtered)
-#            plot_acc(df_filtered)
+        if filtering_on:
+            df_filtered1 = low_pass(df)
+            df_filtered = df_filtered1.iloc[10:]
+            extracted = segment_extract(df_filtered)
+        else:
+            extracted = segment_extract(df)
 
-            # extract feature
-            feats = ts.extract_feature( df_new )
-            # add label column
-            feats['label'] = label
-            if is_clean(feats):
-                dataset = dataset.append( feats, ignore_index = True )
-
-        # saving dataset to file_extracted.csv
-        csvfile_new = join( data_ex, basename(csvfile.split(".")[0]+"_extracted.csv") )
-        dataset.to_csv( csvfile_new, index=False )
-
+        # add information columns
+        extracted['label'] = label
+        extracted['dancer'] = dancer
+        extracted['collection'] = collection
         # append to cobined dataframe
-        df_ext_all = pd.concat([df_ext_all, dataset])
+        df_ext_all = pd.concat([df_ext_all, extracted])
 
     # save combined dataframe -> df_ext_all
-    csv_all = join( data_ex, "full_checked_extracted.csv" )
+    timestr = time.strftime("%y%m%d%H%M")
+    if filtering_on:
+        csvname = "data_filtered_extracted_v1_" + timestr + ".csv"
+    else:
+        csvname = "data_extracted_v1_" + timestr + ".csv"
+    csv_all = join( data_ex, csvname)
     df_ext_all.to_csv( csv_all, index=False )
