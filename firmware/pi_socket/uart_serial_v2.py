@@ -40,7 +40,7 @@ class Uart_Serial():
         self.read_sensor_flag = 0
         self.prediction_flag = False
         self.print_flag = print_sensor
-        self.prediction = 12
+        self.prediction = 13
         self.header = "ax0,ay0,az0,gx0,gy0,gz0,ax1,ay1,az1,gx1,gy1,gz1\n"
         self._collect_thread = threading.Thread(target=self.start_reading, args=())
         self.voltage = 0
@@ -56,7 +56,7 @@ class Uart_Serial():
         if self.prediction_flag == True:
             self.prediction_flag = False
             return self.prediction
-        return 12
+        return 13
 
     def get_info(self):
         v = "%.5f" % self.voltage
@@ -100,6 +100,7 @@ class Uart_Serial():
                 self.prediction = predict_knn.predict(df)
                 self.prediction_flag = True
                 print "My program took", time.time() - start_time, "to predict"
+                # print predict_knn.predict_prob(df)
                 count = 0
                 df = pd.DataFrame()
                 self.ser.flushInput()

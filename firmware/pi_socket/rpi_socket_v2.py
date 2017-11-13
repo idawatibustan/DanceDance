@@ -16,8 +16,8 @@ target_port = int(sys.argv[2])
 dance_moves = [
 'idle',
 'wavehands', 'busdriver', 'frontback', 'sidestep', 'jumping',
-'jumpingjack', 'turnclap', 'squartturnclap', 'window', 'window360',
-'prediction error', 'not ready yet'
+'jumpingjack', 'turnclap', 'squatturnclap', 'windowcleaning', 'windowcleaner360',
+'logout', 'prediction error', 'not ready yet'
 ]
 us = uart.Uart_Serial(print_sensor=False)
 
@@ -36,7 +36,7 @@ def main():
         while True:
             res = us.get_prediction()
             voltage, current, power, cumpower = us.get_info()
-            if ( res != 0 ) and ( res < 6 ):
+            if ( res != 0 ) and ( res < 12 ):
                 print "detected = ", dance_moves[res], "| count = ", counter
                 if res == temp:
                     counter = counter + 1
@@ -50,7 +50,7 @@ def main():
                     counter = 0
                     temp = ""
             time.sleep(1)
-                
+
     except KeyboardInterrupt:
         send_data(s, ['logout  ', 'END', 'END', 'END', 'END'])
         print("\nEnded connection with %s" % target_ipaddr)
