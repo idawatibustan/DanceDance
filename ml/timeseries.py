@@ -399,3 +399,134 @@ def extract_feature_v3(window):
     df['corr_gy0y1'] = [window['gy0'].corr(window['gy1'])]
     
     return df
+
+def extract_feature_v4(window):
+    df = pd.DataFrame()
+
+    # 'mean_ax0', 'mean_az0', 'mean_ax1', 'mean_az1', 'mean_gy1',
+    # Mean data
+    df['mean_ax0'] = [window.ax0.values.mean()]
+    mean_ay0 = window.ay0.values.mean()
+    df['mean_az0'] = [window.az0.values.mean()]
+    df['mean_ax1'] = [window.ax1.values.mean()]
+    df['mean_az1'] = [window.az1.values.mean()]
+    df['mean_gy1'] = [window.gy1.values.mean()]
+    mean_gx1 = window.gx1.values.mean()
+
+    # 'mean_abs_ax0', 'mean_abs_ay0', 'mean_abs_az0', 'mean_abs_ax1',
+    # 'mean_abs_az1', 'mean_abs_gx1', 'mean_abs_gy1',
+
+    # Mean data
+    df['mean_abs_ax0'] = df['mean_ax0'].abs()
+    df['mean_abs_ay0'] = [np.absolute(mean_ay0)]
+    df['mean_abs_az0'] = df['mean_az0'].abs()
+    df['mean_abs_ax1'] = df['mean_ax1'].abs()
+    df['mean_abs_az1'] = df['mean_az1'].abs()
+    df['mean_abs_gx1'] = [np.absolute(mean_gx1)]
+    df['mean_abs_gy1'] = df['mean_gy1'].abs()
+
+
+    # 'std_ax0', 'std_ay0', 'std_az0',
+    # 'std_ax1', 'std_ay1', 'std_az1',
+    # 'std_gx0', 'std_gy0', 'std_gx1', 'std_gy1',
+
+    # STD data
+    df['std_ax0'] = [window.ax0.values.std()]
+    df['std_ay0'] = [window.ay0.values.std()]
+    df['std_az0'] = [window.az0.values.std()]
+    df['std_ax1'] = [window.ax1.values.std()]
+    df['std_ay1'] = [window.ay1.values.std()]
+    df['std_az1'] = [window.az1.values.std()]
+    df['std_gx0'] = [window.gx0.values.std()]
+    df['std_gy0'] = [window.gy0.values.std()]
+    df['std_gx1'] = [window.gx1.values.std()]
+    df['std_gy1'] = [window.gy1.values.std()]
+    
+    # 'median_ax0', 'median_az0',
+    # 'median_ax1', 'median_az1', 'median_gy1',
+    # Median data
+    df['median_ax0'] = [np.median(window.ax0.values)]
+    # df['median_ay0'] = [np.median(window.ay0.values)]
+    df['median_az0'] = [np.median(window.az0.values)]
+    df['median_ax1'] = [np.median(window.ax1.values)]
+    df['median_az1'] = [np.median(window.az1.values)]
+    df['median_gx1'] = [np.median(window.gx1.values)]
+
+    # 'mad_ax0', 'mad_ay0', 'mad_az0',
+    # 'mad_ax1', 'mad_ay1', 'mad_az1',
+    # 'mad_gx0', 'mad_gy0', 'mad_gx1', 'mad_gy1',
+
+    # Mad data
+    mads = window.mad()
+    df['mad_ax0'] = [mads.ax0]
+    df['mad_ay0'] = [mads.ay0]
+    df['mad_az0'] = [mads.az0]
+    df['mad_ax1'] = [mads.ax1]
+    df['mad_ay1'] = [mads.ay1]
+    df['mad_az1'] = [mads.az1]
+    df['mad_gx0'] = [mads.gx0]
+    df['mad_gy0'] = [mads.gy0]
+    df['mad_gx1'] = [mads.gx1]
+    df['mad_gy1'] = [mads.gy1]
+
+    # 'max_ax0', 'max_ay0', 'max_az0', 'max_ax1',
+    # 'max_az1', 'max_gx0', 'max_gy0', 'max_gy1',
+    
+    # Max
+    df['max_ax0'] = [window.ax0.values.max()]
+    df['max_ay0'] = [window.ax0.values.max()]
+    df['max_az0'] = [window.az0.values.max()]
+    df['max_ax1'] = [window.ax1.values.max()]
+    max_ay1 = window.ay1.values.max()
+    df['max_az1'] = [window.az1.values.max()]
+    df['max_gx0'] = [window.gx0.values.max()]
+    df['max_gy0'] = [window.gy0.values.max()]
+    max_gx1 = window.gx1.values.max()
+    df['max_gy1'] = [window.gy1.values.max()]
+
+    # 'min_ax0', 'min_ay0', 'min_az0', 'min_ax1', 'min_az1',
+    # 'min_gx0', 'min_gy0', 'min_gx1', 'min_gy1',
+    
+    # Min
+    df['min_ax0'] = [window.ax0.values.min()]
+    df['min_ay0'] = [window.ay0.values.min()]
+    df['min_az0'] = [window.az0.values.min()]
+    df['min_ax1'] = [window.ax1.values.min()]
+    min_ay1 = window.ay1.values.min()
+    df['min_az1'] = [window.az1.values.min()]
+    df['min_gx0'] = [window.gx0.values.min()]
+    df['min_gy0'] = [window.gy0.values.min()]
+    df['min_gx1'] = [window.gx1.values.min()]
+    df['min_gy1'] = [window.gy1.values.min()]
+
+    # 'range_ax0', 'range_ay0', 'range_az0',
+    # 'range_ax1', 'range_ay1', 'range_az1',
+    # 'range_gx0', 'range_gy0', 'range_gx1', 'range_gy1',
+    
+    # Range
+    df['range_ax0'] = df['max_ax0'] - df['min_ax0']
+    df['range_ay0'] = df['max_ay0'] - df['min_ay0']
+    df['range_az0'] = df['max_az0'] - df['min_az0']
+    df['range_ax1'] = df['max_ax1'] - df['min_ax1']
+    df['range_ay1'] = max_ay1 - min_ay1
+    df['range_az1'] = df['max_az1'] - df['min_az1']
+    df['range_gx0'] = df['max_gx0'] - df['min_gx0']
+    df['range_gy0'] = df['max_gy0'] - df['min_gy0']
+    df['range_gx1'] = max_gx1 - df['min_gx1']
+    df['range_gy1'] = df['max_gy1'] - df['min_gy1']
+
+    # 'corr_axz0', 'corr_ayz0', 'corr_axz1', 'corr_gxy0',
+    # 'corr_ax1x0', 'corr_ay1x0', 'corr_ay1y0', 'corr_ay1z0', 'corr_az1x0'
+
+    # Corr
+    df['corr_axz0'] = [window['ax0'].corr(window['az0'])]
+    df['corr_ayz0'] = [window['ay0'].corr(window['az0'])]
+    df['corr_axz1'] = [window['ax1'].corr(window['az1'])]
+    df['corr_gxy0'] = [window['gx0'].corr(window['gy0'])]
+    df['corr_ax1x0'] = [window['ax1'].corr(window['ax0'])]
+    df['corr_ay1x0'] = [window['ay1'].corr(window['ax0'])]
+    df['corr_ay1y0'] = [window['ay1'].corr(window['ay0'])]
+    df['corr_ay1z0'] = [window['ay1'].corr(window['az0'])]
+    df['corr_az1x0'] = [window['az1'].corr(window['ax0'])]
+
+    return df

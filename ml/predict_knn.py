@@ -11,7 +11,7 @@ from sklearn.metrics import confusion_matrix
 # csvfile = 'test.csv'
 # df = pd.read_csv(csvfile)
 
-MILESTONE = 1
+MILESTONE = 2
 # indicate milestone to decide on number of dance to be classified
 # milestone 1 = 5 moves
 # milestone 2 = 10 moves
@@ -19,7 +19,7 @@ MILESTONE = 1
 if MILESTONE == 1:
     loaded_knn = pickle.load(open('classifier/dance_top5_v3.knn','rb'))
 elif MILESTONE == 2:
-    loaded_knn = pickle.load(open('classifier/dance_v2-3.knn','rb'))
+    loaded_knn = pickle.load(open('classifier/dance_v3.knn','rb'))
 
 def is_clean(df_):
     if np.any(pd.isnull(df_)):
@@ -33,7 +33,7 @@ def process_data(window):
     if MILESTONE == 1:
         feats = ts.extract_feature_v3( window )
     elif MILESTONE == 2:
-        feats = ts.extract_feature_v2( window )
+        feats = ts.extract_feature_v4( window )
     if not is_clean(feats):
         raise ValueError("NaN data found, window can't be processed")
     return feats
@@ -43,15 +43,32 @@ def predict(df):
         f = process_data(df)
     except ValueError as e:
         print "ValueError:", e
-        return 11
+        return 12
     except AttributeError as e:
         print "AttributeError:", e
-        return 11
+        return 12
     except Exception as e:
         print "Exception:", e
-        return 11
+        return 12
     result = loaded_knn.predict(f)
     return result[0]
+
+def predict_prob(df):
+    try:
+        f = process_data(df)
+    except ValueError as e:
+        print "ValueError:", e
+        return 12
+    except AttributeError as e:
+        print "AttributeError:", e
+        return 12
+    except Exception as e:
+        print "Exception:", e
+        return 12
+    result = loaded_knn.predict_proba(f)
+    i = np.argmax(result)
+    c = result[0][i]
+    return i, c
 
 # if __name__ == "__main__":
 #     r = predict(df)
