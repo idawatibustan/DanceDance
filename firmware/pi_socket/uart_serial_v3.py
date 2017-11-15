@@ -99,7 +99,7 @@ class Uart_Serial():
                     row = pd.read_csv(io.BytesIO(self.header+rs.rsplit(',', 3)[0]), sep=',' )
                     df = df.append(row, ignore_index = True)
                     self.voltage, self.current, self.power = extract(rs)
-                    self.cumpower = self.cumpower + self.power
+                    self.cumpower = self.cumpower + (self.power * 0.035)
                     count = count + 1
             if count == 90:
                 print "My program took", time.time() - start_time_one, "to collect"

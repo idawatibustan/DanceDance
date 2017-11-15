@@ -44,7 +44,7 @@ def main():
                     temp = res
                     counter = conf
                 print "detected = ", dance_moves[res], "| count = ", counter
-                if num_moves < 41 and dance_moves[res] == 'logout':
+                if num_moves < 40 and dance_moves[res] == 'logout':
                     counter = 0
                 if counter >= 2 :
                     data_list = [dance_moves[res], voltage, current, power, cumpower]
