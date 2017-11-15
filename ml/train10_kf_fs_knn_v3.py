@@ -10,7 +10,7 @@ import numpy as np
 import pickle
 import itertools
 
-TRAINING_FILE="data_extracted_v3_1711141834"
+TRAINING_FILE="data_extracted_v3"
 TRAINING_FILEPATH='dataset/data_ext/'
 TESTING_FILE="data_test_extracted_v3_1711110156"
 TESTING_FILEPATH='dataset/data_ext_test/'
@@ -31,7 +31,7 @@ def train_knn(train_set, test_set, k):
     testLabel = test_set.label.values
     
     # knnclf = knn(n_neighbors=k)    
-    knnclf = knn(n_neighbors=k , algorithm='ball_tree' , leaf_size=25 , n_jobs=2 , weights='distance')
+    knnclf = knn(n_neighbors=k , algorithm='ball_tree', leaf_size=25 , n_jobs=2 , weights='distance')
 
     knnModel = knnclf.fit(trainData , trainLabel)
 
@@ -221,23 +221,6 @@ if __name__ == "__main__":
     'range_gy0', 'range_gx1', 'corr_ayz0', 'corr_axz1', 'corr_ayz1',
     'corr_gxy0', 'corr_ax1x0', 'corr_ax1y0', 'corr_ax1z0', 'corr_ay1x0',
     'corr_ay1y0', 'corr_ay1z0', 'corr_gy0y1',
-    'label','dancer','collection']
-    """ FEATURES 10 moves - best n_neighbor = 4 """
-    feature_list = [
-    'mean_ax0', 'mean_az0', 'mean_ax1', 'mean_az1', 'mean_gy1',
-    'mean_abs_ax0', 'mean_abs_ay0', 'mean_abs_az0', 'mean_abs_ax1',
-    'mean_abs_az1', 'mean_abs_gx1', 'mean_abs_gy1', 'std_ax0',
-    'std_ay0', 'std_az0', 'std_ax1', 'std_ay1', 'std_az1', 'std_gx0',
-    'std_gy0', 'std_gx1', 'std_gy1', 'median_ax0', 'median_az0',
-    'median_ax1', 'median_az1', 'median_gy1', 'mad_ax0', 'mad_ay0',
-    'mad_az0', 'mad_ax1', 'mad_ay1', 'mad_az1', 'mad_gx0', 'mad_gy0',
-    'mad_gx1', 'mad_gy1', 'max_ax0', 'max_ay0', 'max_az0', 'max_ax1',
-    'max_az1', 'max_gx0', 'max_gy0', 'max_gy1', 'min_ax0', 'min_ay0',
-    'min_az0', 'min_ax1', 'min_az1', 'min_gx0', 'min_gy0', 'min_gx1',
-    'min_gy1', 'range_ax0', 'range_ay0', 'range_az0', 'range_ax1',
-    'range_ay1', 'range_az1', 'range_gx0', 'range_gy0', 'range_gx1',
-    'range_gy1', 'corr_axz0', 'corr_ayz0', 'corr_axz1', 'corr_gxy0',
-    'corr_ax1x0', 'corr_ay1x0', 'corr_ay1y0', 'corr_ay1z0', 'corr_az1x0',
     'label','dancer','collection']
 
     """ FEATURES 10 moves V4 - Best n-neighbor = 4 """
