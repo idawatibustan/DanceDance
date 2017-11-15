@@ -12,9 +12,9 @@ import pickle
 import itertools
 
 TRAINING_FILE="data_extracted_v3"
-TRAINING_FILEPATH='dataset/data_ext/'
+TRAINING_FILEPATH='data_ext/'
 TESTING_FILE="data_test_extracted_v3_1711110156"
-TESTING_FILEPATH='dataset/data_ext_test/'
+TESTING_FILEPATH='data_ext_test/'
 MODEL_FILE="dance_v3"
 EXC_DANCER = 2
 
@@ -259,4 +259,4 @@ if __name__ == "__main__":
         color=sns.color_palette("Set2", 10)[3],
         scale=0.25, ci=.50
         )
-    plt.show()
+    # plt.show()

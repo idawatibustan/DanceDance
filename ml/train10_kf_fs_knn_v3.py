@@ -11,9 +11,9 @@ import pickle
 import itertools
 
 TRAINING_FILE="data_extracted_v3"
-TRAINING_FILEPATH='dataset/data_ext/'
+TRAINING_FILEPATH='data_ext/'
 TESTING_FILE="data_test_extracted_v3_1711110156"
-TESTING_FILEPATH='dataset/data_ext_test/'
+TESTING_FILEPATH='data_ext_test/'
 MODEL_FILE="dance_v3"
 EXC_DANCER = 2
 
@@ -179,19 +179,19 @@ def kfoldcrossval(df, k):
     return mf, knnModel
 
 def test_model(knnModel):
-    df = pd.read_csv(TRAINING_FILEPATH+TRAINING_FILE+'.csv')
-    if fs:
-        df = df[feature_list]
-    """EXCLUDE DANCE MOVES"""
-    if ex:
-        df = df.loc[df['label'] != exclusion]
-    cnf_mats = []
-    for i in range(1,9):
-        print("Testing on excluded dancer:", i)
-        df1 = df.loc[df['dancer'] == i]
-        cm, score = test_classifier(knnModel, df1)
-        cnf_mats.append(cm)
-    plot_all_cnfmats(cnf_mats)
+    # df = pd.read_csv(TRAINING_FILEPATH+TRAINING_FILE+'.csv')
+    # if fs:
+    #     df = df[feature_list]
+    # """EXCLUDE DANCE MOVES"""
+    # if ex:
+    #     df = df.loc[df['label'] != exclusion]
+    # cnf_mats = []
+    # for i in range(1,9):
+    #     print("Testing on excluded dancer:", i)
+    #     df1 = df.loc[df['dancer'] == i]
+    #     cm, score = test_classifier(knnModel, df1)
+    #     cnf_mats.append(cm)
+    # plot_all_cnfmats(cnf_mats)
 
     df = pd.read_csv(TESTING_FILEPATH+TESTING_FILE+'.csv')
     if fs:
@@ -207,21 +207,6 @@ def test_model(knnModel):
 if __name__ == "__main__":
     # activate logger
     log = activate_logger('train_kf', 'log/'+MODEL_FILE+'.log', append=False)
-
-    """ FEATURES FOR MOVES 1 - 5 """
-    feature_list = [
-    'mean_ax0', 'mean_az0', 'mean_ax1', 'mean_abs_ax0', 'mean_abs_az0',
-    'mean_abs_az1', 'std_ax0', 'std_ay0', 'std_az0', 'std_ax1',
-    'std_ay1', 'std_az1', 'std_gx0', 'std_gy0', 'std_gx1', 'std_gy1',
-    'median_ax0', 'median_ay0', 'median_ax1', 'median_az1', 'mad_ax0',
-    'mad_ay0', 'mad_az0', 'mad_ax1', 'mad_ay1', 'mad_az1', 'mad_gy0',
-    'mad_gx1', 'mad_gy1', 'max_ax0', 'max_az0', 'max_ay1', 'max_az1',
-    'max_gy0', 'max_gx1', 'min_ay0', 'min_ax1', 'min_az1', 'min_gy0',
-    'min_gx1', 'range_az0', 'range_ax1', 'range_ay1', 'range_az1',
-    'range_gy0', 'range_gx1', 'corr_ayz0', 'corr_axz1', 'corr_ayz1',
-    'corr_gxy0', 'corr_ax1x0', 'corr_ax1y0', 'corr_ax1z0', 'corr_ay1x0',
-    'corr_ay1y0', 'corr_ay1z0', 'corr_gy0y1',
-    'label','dancer','collection']
 
     """ FEATURES 10 moves V4 - Best n-neighbor = 4 """
     feature_list = [
@@ -263,9 +248,7 @@ if __name__ == "__main__":
             df = df[feature_list]
     print("Number of features", len(df.columns))
 
-    neighbors = range(1,20)
-
     k = 4
     mf, bestModel = kfoldcrossval(df, k)
     test_model(bestModel)
-    plt.show()
+    # plt.show()
